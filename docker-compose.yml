@@ -1,7 +1,9 @@
 version: '3' # docker version
 services:
   www:
-    image: php:8.1-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - "./src:/var/www/html" # sync project dir with container web dir
     ports:
