@@ -26,6 +26,7 @@ services:
     volumes:
       # mount a volume for mysql to not lose db data
       - ./volumes/mysql:/var/lib/mysql
+      - ./db:/docker-entrypoint-initdb.d/structure.sql
 
   phpmyadmin:
     image: phpmyadmin:5.2.1
