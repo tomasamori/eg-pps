@@ -20,10 +20,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="../user/user.php">CRUD User</a>
+          <a class="nav-link" aria-current="page" href="../index.php">Contacto</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="../career/career.php">CRUD Career</a>
+          <a class="nav-link" aria-current="page" href="../index.php">Listado de profesores</a>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            CRUDs
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="../user/user.php">CRUD User</a></li>
+            <li><a class="dropdown-item" href="../career/career.php">CRUD Career</a></li>
+          </ul>
         </li>
       </ul>
       <form class="d-flex" role="search">
