@@ -37,6 +37,18 @@
                             <?php } ?>
                         </select>
                     </div>
+                    <?php
+                    $query = "SELECT * FROM role";
+                    $result_role = mysqli_query($conn, $query);
+                    ?>
+                    <div class="form-group m-2">
+                        <select name="role_id" class="form-control" required>
+                            <option value="">Seleccione un rol</option>
+                            <?php while ($row = mysqli_fetch_assoc($result_role)) { ?>
+                                <option value="<?php echo $row['role_id']; ?>"><?php echo $row['name']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                     <br>
                     <input type="submit" class="btn btn-success btn-block mx-auto d-block" name="user_create" value="Guardar Usuario">
                 </form>
@@ -52,12 +64,13 @@
                         <th>Email</th>
                         <th>Nombre y Apellido</th>
                         <th>Carrera</th>
+                        <th>Rol</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
-                    $query = "SELECT user.user_id, user.email, user.password, user.name, career.name AS career_name FROM user INNER JOIN career ON user.career_id = career.career_id WHERE user.deleted=0";
+                    $query = "SELECT user.user_id, user.email, user.password, user.name, career.name AS career_name, role.name AS role_name FROM user INNER JOIN career ON user.career_id = career.career_id INNER JOIN role ON user.role_id = role.role_id WHERE user.deleted=0";
                     $result_users = mysqli_query($conn, $query);
                     while ($row = mysqli_fetch_array($result_users)) { ?>
                         <tr>
@@ -65,6 +78,7 @@
                             <td><?php echo $row['email'] ?></td>
                             <td><?php echo $row['name'] ?></td>
                             <td><?php echo $row['career_name'] ?></td>
+                            <td><?php echo $row['role_name'] ?></td>
                             <td class="text-center">
                                 <a href="user_update.php?user_id=<?php echo $row['user_id'] ?>" class="btn btn-primary" role="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
