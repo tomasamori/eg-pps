@@ -34,27 +34,14 @@
           </ul>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Acceder
+      <form class="d-flex">
+        <?php if (isset($_SESSION['user_id'])): ?>
+          <a class="btn btn-outline-danger" href="../auth/logout.php">Cerrar Sesión</a>
+        <?php else: ?>
+          <a class="btn btn-outline-info me-2" href="../auth/login.php">Acceder</a>
+          <a class="btn btn-outline-info" href="../auth/signup.php">Registrarse</a>
+        <?php endif; ?>
       </form>
     </div>
   </div>
 </nav>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Ventana Modal</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Contenido de la ventana modal...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Guardar cambios</button>
-      </div>
-    </div>
-  </div>
-</div>
