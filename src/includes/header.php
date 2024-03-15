@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
     <a class="navbar-brand" href="../index.php">
-        <img src="../img/logo-utn.png" alt="Logo-UTN" class="navbar-brand-img mr-2 img-fluid" style="max-height: 60px;">
+        <img src="../img/logo - utn.png" alt="Logo-UTN" class="navbar-brand-img mr-2 img-fluid" style="max-height: 60px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -20,17 +20,17 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="../index.php">Contacto</a>
+          <a class="nav-link" aria-current="page" href="../index.php">Listado de profesores</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="../index.php">Listado de profesores</a>
+          <a class="nav-link" aria-current="page" href="../index.php">Contacto</a>
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            CRUDs
+            Menus
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="../user/user.php">CRUD User</a></li>
-            <li><a class="dropdown-item" href="../career/career.php">CRUD Career</a></li>
+            <li><a class="dropdown-item" href="../user/user.php">Usuarios</a></li>
+            <li><a class="dropdown-item" href="../career/career.php">Carreras</a></li>
           </ul>
         </li>
       </ul>
