@@ -23,7 +23,9 @@
           <a class="nav-link" aria-current="page" href="../professor_list/prof_list.php">Listado de profesores</a>
         </li>
         <li class="nav-item">
-         
+          <a class="nav-link" aria-current="page" href="../spp/spp.php">Solicitud de PPS</a>
+        </li>
+        <li class="nav-item">
           <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Menus

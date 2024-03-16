@@ -1,7 +1,7 @@
-<footer class="text-center bg-dark text-white py-4">
+<footer class="text-center bg-dark text-white py-2">
     <div class="container">
-        <section class="mb-4">
-            <img src="../img/Footer-UTN.png" alt="Logo-UTN" class="navbar-brand-img mr-2 img-fluid"
+        <section class="mb-2">
+            <img src="../img/Footer-UTN.png" alt="Logo-UTN" class="navbar-brand-img mr-1 img-fluid"
                 style="max-height: 60px;">
             <br>
             <!-- Instagram -->
@@ -45,10 +45,6 @@
                 </svg>
             </a>
         </section>
-    </div>
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2024 Copyright:
-        <a class="text-white" href="https://www.frro.utn.edu.ar/" target="_blank">Universidad Tecnológica Nacional</a>
     </div>
 </footer>
 
