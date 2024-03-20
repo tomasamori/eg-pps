@@ -1,3 +1,11 @@
+<style>
+    footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+
 <footer class="text-center bg-dark text-white py-2">
     <div class="container">
         <section class="mb-2">

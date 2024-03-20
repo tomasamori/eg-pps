@@ -12,7 +12,7 @@
                     </svg>
                     Profesores Disponibles
                 </h2>
-                <table>
+                <table class="table">
                     <tbody>
                         <?php
                         $query = "SELECT user_id, user.name, user.email, career.name AS career_name FROM user INNER JOIN career ON user.career_id = career.career_id WHERE role_id = '2'";
@@ -61,26 +61,5 @@
         </div>
     </div>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 <?php include("../includes/footer.php") ?>
