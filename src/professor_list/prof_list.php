@@ -15,8 +15,21 @@
                 <table class="table">
                     <tbody>
                         <?php
-                        $query = "SELECT user_id, user.name, user.email, career.name AS career_name FROM user INNER JOIN career ON user.career_id = career.career_id WHERE role_id = '2'";
+                        $query = "SELECT user_id, user.name, user.email, career.name AS career_name 
+                        FROM user 
+                        INNER JOIN career ON user.career_id = career.career_id 
+                        LEFT JOIN spp_user ON spp_user.mentor_id = user.user_id
+                        WHERE role_id = '2'";
+                        //En caso de que el usuario esté logueado
+                        if (isset($_SESSION['user_id'])) {
+                            $student_id = $_SESSION['user_id'];
+                            $query .= " AND user.career_id IN (SELECT user.career_id FROM user WHERE user.user_id = '$student_id')";
+                        }
+
+                        $query .= " GROUP BY user_id
+                                    HAVING COALESCE(COUNT(spp_user.mentor_id), 0) < 10";
                         $result_users = mysqli_query($conn, $query);
+              
                         while ($row = mysqli_fetch_array($result_users)) { ?>
                             <tr>
                                 <td style="font-size: 20px;"><img src="../img/utn-logo.png" width="45">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $row['name'] ?></td>
