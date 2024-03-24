@@ -15,6 +15,7 @@
 # Ignore package manager directories
 /node_modules/
 /packages/
+vendor
 
 # Ignore log files
 *.log
@@ -27,3 +28,6 @@
 
 /volumes/mysql/
 /config/phpmyadmin/config.user.inc.php/
+
+# Ignore environment files
+.env

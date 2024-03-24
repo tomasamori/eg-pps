@@ -1,9 +1,14 @@
 <?php
 
-$servername = "db";
-$username = "test";
-$password = "test";
-$database = "eg-pps";
+require 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$servername = $_ENV['DATABASE_SERVERNAME'];
+$username = $_ENV['DATABASE_USERNAME'];
+$password = $_ENV['DATABASE_PASSWORD'];
+$database = $_ENV['DATABASE_NAME'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $database);
