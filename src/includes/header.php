@@ -38,7 +38,8 @@
       </ul>
       <form class="d-flex">
         <?php if (isset($_SESSION['user_id'])): ?>
-          <a class="btn btn-outline-danger" href="../auth/logout.php">Cerrar Sesión</a>
+          <a class="btn btn-outline-danger me-2" href="../auth/logout.php">Cerrar Sesión</a>
+          <a class="btn btn-outline-secondary" href="../user/user_edit.php">Editar Perfil</a>
         <?php else: ?>
           <a class="btn btn-outline-info me-2" href="../auth/login.php">Acceder</a>
           <a class="btn btn-outline-info" href="../auth/signup.php">Registrarse</a>
