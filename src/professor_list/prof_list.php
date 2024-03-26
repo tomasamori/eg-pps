@@ -40,8 +40,7 @@
                                             user.user_id
                                             HAVING 
                                             COALESCE(SUM(spp_status = 'in course'), 0) < 10";
-                                                
-                            echo "hasta aca llega";                    
+                                                                
                             $result_users = mysqli_query($conn, $query);
                         } else {
                             $message = 'No se encontró el rol "Profesor"';
