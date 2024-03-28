@@ -69,24 +69,25 @@ if ($result && $result->num_rows > 0) {
                         <img src="../img/utn-logo.png" alt="Logo UTN" class="navbar-brand-img mt-4 mb-4 img-fluid"
                             style="max-height: 70px;">
                     </div>
-                    <div class="form-group m-2">
-                        <input type="email" name="email" class="form-control" placeholder="Ingrese su Email" autofocus
-                            required>
-                    </div>
 
-                    <?php if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty ($message)): ?>
-                        <br>
-                        <div class="row justify-content-center align-items-center">
+                    <?php if ($_SERVER["REQUEST_METHOD"] !== "POST"): ?>
+                        <div class="form-group m-2">
+                            <input type="email" name="email" class="form-control" placeholder="Ingrese su Email" autofocus required>
+                        </div>
+                        <input type="submit" class="btn btn-success btn-block mx-auto d-block mt-4" name="reset_password" value="Recuperar Contraseña" id="reset_password_btn">
+                    <?php endif; ?>
+
+                    <?php if (!empty($message) && $_SERVER["REQUEST_METHOD"] === "POST"): ?>
+                        <div class="row justify-content-center align-items-center text-center">
                             <div class="col-md-10">
-                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <div class="alert alert-success alert-dismissible fade show mt-4 mb-4" role="alert">
                                     <?= $message ?>
                                 </div>
+                                <a href="../index.php" class="fs-6">Volver</a>
                             </div>
                         </div>
                     <?php endif; ?>
 
-                    <input type="submit" class="btn btn-success btn-block mx-auto d-block mt-4" name="reset_password"
-                        value="Recuperar Contraseña" id="reset_password_btn">
                 </form>
             </div>
         </div>
