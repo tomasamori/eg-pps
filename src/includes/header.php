@@ -65,7 +65,7 @@
       </ul>
       <form class="d-flex">
         <?php if (isset($_SESSION['user_id'])): ?>
-          <div class="dropdown me-4">
+          <div class="dropstart me-4">
             <button class="btn btn-primary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fa-solid fa-bell"></i>
               <?php if ($unreadNotifications > 0): ?>
@@ -75,12 +75,40 @@
                 </span>
               <?php endif; ?>
             </button>
-            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-              <li><a class="dropdown-item" href="#">Notification 1</a></li>
-              <li><a class="dropdown-item" href="#">Notification 2</a></li>
-              <li><a class="dropdown-item" href="#">Notification 3</a></li>
+            <ul class="dropdown-menu text-truncated" aria-labelledby="notificationDropdown">
+              <li><h6 class="dropdown-header">Notificaciones</h6></li>
+              <?php
+                $sql = "SELECT * FROM notification WHERE receiver_id = ? ORDER BY timestamp DESC LIMIT 5";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $_SESSION["user_id"]);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                if ($result->num_rows === 0): ?>
+                  <li><a class='dropdown-item fw-lighter'><small>No hay notificaciones</small></a></li>
+                <?php else:
+                  while ($row = $result->fetch_assoc()): ?>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <a class="dropdown-item" href="../notification/notification_show.php?id=<?php echo $row["notification_id"]; ?>">
+                        <?php if ($row["status"] === "No leída"): ?>
+                          <strong><small class="d-inline-block text-truncate" style="max-width: 350px;">
+                              <?php echo $row["message"]; ?>
+                            </small></strong>
+                        <?php else: ?>
+                          <small class="d-inline-block text-truncate" style="max-width: 300px;">
+                            <?php echo $row["message"]; ?>
+                          </small>
+                        <?php endif; ?>
+                      </a>
+                      <div class="text-align-end ms-2 me-2">
+                        <button class="btn btn-outline-secondary mb-1" data-notification-id="<?php echo $row["notification_id"]; ?>" title="Marcar como leída">
+                          <i class="fa-solid fa-check fa-2xs"></i>
+                        </button>
+                      </div>
+                    </div>
+                  <?php endwhile; ?>
+                <?php endif; ?>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Ver todas las notificaciones</a></li>
+              <li><a class="dropdown-item" href="#"><small>Ver todas las notificaciones</small></a></li>
             </ul>
           </div>
           <a class="btn btn-outline-danger me-2" href="../auth/logout.php">Cerrar Sesión</a>
