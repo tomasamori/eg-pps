@@ -6,6 +6,8 @@
     <title>Sistema PPS</title>
     <!-- BOOSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- FONT AWESOME -->
+    <script src="https://kit.fontawesome.com/cafe638f84.js" crossorigin="anonymous"></script>
 </head>
 <style>
   body {
@@ -14,6 +16,25 @@
     }
 </style>
 <body>
+
+<?php
+  require_once __DIR__ . '/../db.php';
+
+  function getUnreadNotifications($userId) {
+    global $conn;
+    $sql = "SELECT COUNT(*) AS total FROM notification WHERE receiver_id = ? AND status = 'No leída'";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row;
+  }
+
+  if (isset($_SESSION["user_id"])) {
+    $unreadNotifications = getUnreadNotifications($_SESSION["user_id"])["total"];
+  }
+  ?>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
   <div class="container-fluid">
@@ -44,6 +65,24 @@
       </ul>
       <form class="d-flex">
         <?php if (isset($_SESSION['user_id'])): ?>
+          <div class="dropdown me-4">
+            <button class="btn btn-primary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bell"></i>
+              <?php if ($unreadNotifications > 0): ?>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <?= $unreadNotifications ?>
+                  <span class="visually-hidden">Notificaciones no leídas</span>
+                </span>
+              <?php endif; ?>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+              <li><a class="dropdown-item" href="#">Notification 1</a></li>
+              <li><a class="dropdown-item" href="#">Notification 2</a></li>
+              <li><a class="dropdown-item" href="#">Notification 3</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Ver todas las notificaciones</a></li>
+            </ul>
+          </div>
           <a class="btn btn-outline-danger me-2" href="../auth/logout.php">Cerrar Sesión</a>
           <a class="btn btn-outline-secondary" href="../user/user_edit.php">Editar Perfil</a>
         <?php else: ?>
