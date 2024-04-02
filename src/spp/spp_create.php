@@ -10,12 +10,11 @@
         $organization_state = $_POST['organization_state'];
         $organization_zip = $_POST['organization_zip'];
         $start_date = date('Y-m-d');
-        $status = "Pendiente de aprobación";
-        $organization_contact = $_POST['organization_contact'];
+        $status = "unasigned";
 
-        $sql = "INSERT INTO spp (organization_name, organization_email, organization_phone, organization_address, organization_city, organization_state, organization_zip, start_date, status, organization_contact) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO spp (organization_name, organization_email, organization_phone, organization_address, organization_city, organization_state, organization_zip, start_date, status) VALUES (?,?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('ssssssisss', $organization_name, $organization_email, $organization_phone, $organization_address, $organization_city, $organization_state, $organization_zip, $start_date, $status, $organization_contact);
+        $stmt->bind_param('ssssssiss', $organization_name, $organization_email, $organization_phone, $organization_address, $organization_city, $organization_state, $organization_zip, $start_date, $status);
         if ($stmt->execute()) {
             $spp_id = mysqli_insert_id($conn);
             $user_id = $_SESSION['user_id'];

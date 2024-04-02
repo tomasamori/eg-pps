@@ -12,9 +12,10 @@ include("../includes/header.php")
                         <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5" />
                         <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M9.98 5.356 11.372 10h.128a.5.5 0 0 1 0 1H11a.5.5 0 0 1-.479-.356l-.94-3.135-1.092 5.096a.5.5 0 0 1-.968.039L6.383 8.85l-.936 1.873A.5.5 0 0 1 5 11h-.5a.5.5 0 0 1 0-1h.191l1.362-2.724a.5.5 0 0 1 .926.08l.94 3.135 1.092-5.096a.5.5 0 0 1 .968-.039Z" />
                     </svg>
-                    Listado de PPs
+                    Mis PPs
                 </h2>
                 <table class="table">
+                    
                     <thead>
                         <tr class="text-center">
                             <th>ID</th>
@@ -40,16 +41,41 @@ include("../includes/header.php")
                         spp.status, 
                         student.name AS student_name, 
                         student.email AS student_email, 
-                        supervisor.name AS supervisor_name, 
-                        supervisor.email AS supervisor_email, 
-                        mentor.name AS mentor_name, 
-                        mentor.email AS mentor_email
-                 FROM spp
-                 LEFT JOIN spp_user ON spp.spp_id = spp_user.spp_id
-                 LEFT JOIN user AS student ON spp_user.student_id = student.user_id
-                 LEFT JOIN user AS supervisor ON spp_user.supervisor_id = supervisor.user_id
-                 LEFT JOIN user AS mentor ON spp_user.mentor_id = mentor.user_id;
-                 ";
+                        COALESCE(supervisor.name, 'SIN ASIGNAR') AS supervisor_name, 
+                        COALESCE(supervisor.email, 'SIN ASIGNAR') AS supervisor_email, 
+                        COALESCE(mentor.name, 'SIN ASIGNAR') AS mentor_name, 
+                        COALESCE(mentor.email, 'SIN ASIGNAR') AS mentor_email
+                        FROM spp
+                                LEFT JOIN spp_user ON spp.spp_id = spp_user.spp_id
+                                LEFT JOIN user AS student ON spp_user.student_id = student.user_id
+                                LEFT JOIN user AS supervisor ON spp_user.supervisor_id = supervisor.user_id
+                                LEFT JOIN user AS mentor ON spp_user.mentor_id = mentor.user_id";
+                                
+                    // En caso de que el usuario esté logueado, se le muestran determinadas spp de acuerdo a su ROL
+                    if (isset($_SESSION['user_id'])) {
+                        $user_id= $_SESSION['user_id'];
+                        $stmt = $conn->prepare('SELECT name FROM role WHERE role_id = ?');
+                        $stmt->bind_param('i', $_SESSION['role_id']); // 'i' indica que el valor es un entero
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        $results = $result->fetch_assoc();
+                        $role_name = $results['name'];
+                        
+                        switch ($role_name) {
+                            case 'Alumno':
+                                $query.=" WHERE spp_user.student_id = '$user_id'";
+                                break;
+                            case 'Profesor':
+                                $query.=" WHERE spp_user.mentor_id = '$user_id'";
+                                break;
+                            case 'Responsable':
+                                $query .= "WHERE spp.status = 'unasigned'";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                         $result_spp = mysqli_query($conn, $query);
                         while ($row = mysqli_fetch_array($result_spp)) { ?>
                             <tr>
@@ -131,6 +157,16 @@ include("../includes/header.php")
                         <?php } ?>
                     </tbody>
                 </table>
+                <!-- En caso de que el usuario no tenga ninguna SPP creada asociada a su ID -->
+                <?php if ($result_spp && mysqli_num_rows($result_spp) === 0): ?>
+                    <div class="container mt-4">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6 text-center">
+                                <button class="btn btn-primary btn-lg btn-block" onclick="window.location.href = 'spp.php'">Nueva Solicitud</button>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

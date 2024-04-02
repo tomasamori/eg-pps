@@ -49,9 +49,6 @@ $message = ''
             <div class="col-md-6 p-2">
                 <input type="email" id="organization_email" name="organization_email" class="form-control" placeholder="Email de la Organización" required>
             </div>
-            <div class="col-md-6 p-2">
-                <input type="text" id="organization_contact" name="organization_contact" class="form-control" placeholder="Persona de Contacto" required>
-            </div>
         </div>
         <div class="row justify-content-center mt-3">
             <div class="col-auto">

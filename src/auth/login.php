@@ -9,7 +9,7 @@ if (isset ($_SESSION['user_id'])) {
 require '../db.php';
 
 if (!empty ($_POST['email']) && !empty ($_POST['password'])) {
-    $stmt = $conn->prepare('SELECT user_id, email, password FROM user WHERE email = ?');
+    $stmt = $conn->prepare('SELECT user_id, email, role_id, password FROM user WHERE email = ?');
     $stmt->bind_param('s', $_POST['email']);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -19,6 +19,7 @@ if (!empty ($_POST['email']) && !empty ($_POST['password'])) {
 
     if ($results && password_verify($_POST['password'], $results['password'])) {
         $_SESSION['user_id'] = $results['user_id'];
+        $_SESSION['role_id'] = $results['role_id'];
         header("Location: ../index.php");
     } else {
         $message = 'Credenciales inválidas';
