@@ -22,7 +22,7 @@
 
   function getUnreadNotifications($userId) {
     global $conn;
-    $sql = "SELECT COUNT(*) AS total FROM notification WHERE receiver_id = ? AND status = 'No leída'";
+    $sql = "SELECT COUNT(*) AS total FROM notification WHERE receiver_id = ? AND status = 'No leída' AND deleted = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -78,7 +78,7 @@
             <ul class="dropdown-menu text-truncated" aria-labelledby="notificationDropdown">
               <li><h6 class="dropdown-header">Notificaciones</h6></li>
               <?php
-                $sql = "SELECT * FROM notification WHERE receiver_id = ? ORDER BY timestamp DESC LIMIT 5";
+                $sql = "SELECT * FROM notification WHERE receiver_id = ? AND deleted = 0 ORDER BY timestamp DESC";
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("i", $_SESSION["user_id"]);
                 $stmt->execute();
@@ -88,27 +88,30 @@
                 <?php else:
                   while ($row = $result->fetch_assoc()): ?>
                     <div class="d-flex align-items-center justify-content-between">
-                      <a class="dropdown-item" href="../notification/notification_show.php?id=<?php echo $row["notification_id"]; ?>">
-                        <?php if ($row["status"] === "No leída"): ?>
-                          <strong><small class="d-inline-block text-truncate" style="max-width: 350px;">
-                              <?php echo $row["message"]; ?>
-                            </small></strong>
-                        <?php else: ?>
-                          <small class="d-inline-block text-truncate" style="max-width: 300px;">
+                    <button class="dropdown-item notification-link" data-notification-id="<?php echo $row["notification_id"]; ?>">
+                      <?php if ($row["status"] === "No leída"): ?>
+                        <strong><small class="d-inline-block text-truncate" style="max-width: 350px;">
                             <?php echo $row["message"]; ?>
-                          </small>
-                        <?php endif; ?>
-                      </a>
+                          </small></strong>
+                      <?php else: ?>
+                        <small class="d-inline-block text-truncate" style="max-width: 300px;">
+                          <?php echo $row["message"]; ?>
+                        </small>
+                      <?php endif; ?>
+                    </button>
                       <div class="text-align-end ms-2 me-2">
-                        <button class="btn btn-outline-secondary mb-1" data-notification-id="<?php echo $row["notification_id"]; ?>" title="Marcar como leída">
-                          <i class="fa-solid fa-check fa-2xs"></i>
+                        <button class="btn btn-outline-secondary mb-1 delete-notification" data-notification-id="<?php echo $row["notification_id"]; ?>" title="Eliminar notificación">
+                          <i class="fa-solid fa-trash fa-xs" style="color: #ff0000;"></i>
                         </button>
                       </div>
                     </div>
                   <?php endwhile; ?>
                 <?php endif; ?>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#"><small>Ver todas las notificaciones</small></a></li>
+                  <div class="text-start">
+                    <a id="mark-all-as-read" class="btn btn-link text-secondary-emphasis" href="#"><small>Marcar todas como leídas</small></a>
+                  </div>
+              </li>
             </ul>
           </div>
           <a class="btn btn-outline-danger me-2" href="../auth/logout.php">Cerrar Sesión</a>
@@ -121,3 +124,129 @@
     </div>
   </div>
 </nav>
+
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="notificationModalLabel">Detalles de la notificación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="notificationMessage"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    document.getElementById("mark-all-as-read").addEventListener("click", function(event) {
+        event.preventDefault();
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "../notification/mark_all_as_read.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                if (response === "success") {
+                    alert("Todas las notificaciones han sido marcadas como leídas.");
+                    window.location.reload();
+                } else {
+                    alert("Hubo un error al marcar las notificaciones como leídas. Por favor, inténtalo de nuevo más tarde.");
+                }
+            }
+        };
+        xhr.send();
+    });
+
+    var deleteButtons = document.querySelectorAll(".delete-notification");
+    deleteButtons.forEach(function(button) {
+        button.addEventListener("click", function(event) {
+            event.preventDefault();
+            var notificationId = this.getAttribute("data-notification-id");
+            var confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta notificación?");
+            if (confirmDelete) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "../notification/notification_delete.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = xhr.responseText;
+                        if (response === "success") {
+                            alert("La notificación ha sido eliminada correctamente.");
+                            window.location.reload();
+                        } else {
+                            alert("Hubo un error al eliminar la notificación. Por favor, inténtalo de nuevo más tarde.");
+                        }
+                    }
+                };
+                xhr.send("notification_id=" + encodeURIComponent(notificationId));
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var openedNotificationId;
+
+        var notificationLinks = document.querySelectorAll('.notification-link');
+        notificationLinks.forEach(function(link) {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                openedNotificationId = this.getAttribute('data-notification-id');
+                var modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                modal.show();
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "../notification/get_notification_message.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = xhr.responseText;
+                        if (response) {
+                            document.getElementById('notificationMessage').textContent = response;
+                        } else {
+                            alert("Error al obtener el mensaje de la notificación.");
+                        }
+                    }
+                };
+                xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+            });
+        });
+        
+        var notificationModal = document.getElementById('notificationModal');
+        notificationModal.addEventListener('hidden.bs.modal', function () {
+            document.getElementById('notificationMessage').textContent = "";
+            document.body.classList.remove('modal-open');
+            var backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.parentNode.removeChild(backdrop);
+            }
+            if (openedNotificationId) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "../notification/mark_as_read.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = xhr.responseText;
+                        if (response === "success") {
+                            var notificationElement = document.querySelector('.notification-link[data-notification-id="' + openedNotificationId + '"]');
+                            if (notificationElement) {
+                                notificationElement.classList.remove('text-bold');
+                            }
+                        } else {
+                            alert("Error al marcar la notificación como leída.");
+                        }
+                    }
+                };
+                xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+                
+                openedNotificationId = null;
+                window.location.reload();
+            }
+        });
+    });
+
+</script>
