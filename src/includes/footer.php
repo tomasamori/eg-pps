@@ -1,10 +1,14 @@
 <style>
-    
     footer {
-        position: static;
+        position: absolute;
         bottom: 0;
         width: 100%;
-        height: 100%;
+    }
+
+    body {
+        position: relative;
+        min-height: 100vh;
+        padding-bottom: 60.5px;
     }
 </style>
 
@@ -65,5 +69,4 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 </body>
-
 </html>
