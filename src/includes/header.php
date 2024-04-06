@@ -66,7 +66,7 @@
       <form class="d-flex">
         <?php if (isset($_SESSION['user_id'])): ?>
           <div class="dropstart me-4">
-            <button class="btn btn-primary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-primary position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones">
               <i class="fa-solid fa-bell"></i>
               <?php if ($unreadNotifications > 0): ?>
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
