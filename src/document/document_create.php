@@ -3,7 +3,16 @@
 
 include("../db.php");
 
-if (isset($_POST['create'])) {
+if (isset($_SESSION['user_id'])) { 
+    $user_id = $_SESSION['user_id'];
+    $query = "SELECT spp_id FROM spp_user WHERE student_id = $user_id";
+    $result = mysqli_query($conn, $query);
+    if(mysqli_num_rows($result) == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $spp_id = $row['spp_id'];
+        }
+
+    if (isset($_POST['create'])) {
     extract($_POST);
     $type = $_POST['type'];
 
@@ -21,7 +30,7 @@ if (isset($_POST['create'])) {
         if (move_uploaded_file($_FILES["file"]["tmp_name"], $destination_folder . $file_name)) {
 
             // Insertar la información del archivo en la base de datos
-            $sql = "INSERT INTO document (path, type, spp_id) VALUES ('$file_name', '$type', '7')";
+            $sql = "INSERT INTO document (path, type, spp_id) VALUES ('$file_name', '$type', '$spp_id')";
             $result = mysqli_query($conn, $sql);
 
             if ($result) {
@@ -48,5 +57,5 @@ if (isset($_POST['create'])) {
         </script>";
     }
 }
-
+}
 ?>
