@@ -58,8 +58,11 @@ if (isset($_SESSION['user_id'])) {
                         </thead>
                         <tbody>
                             <?php
-                            //$query = "SELECT * from document WHERE spp_id='$spp_id'";
-                            $query = "SELECT * from document";
+                            if ($role_student == $role_user) {
+                                $query = "SELECT * from document WHERE spp_id='$spp_id'";
+                            } elseif ($role_prof == $role_user) { 
+                                $query = "SELECT * from document INNER JOIN spp_user su ON '$user_id' = su.mentor_id";
+                            }
                             $result_docs = mysqli_query($conn, $query);
                             while ($row = mysqli_fetch_array($result_docs)) { ?>
                                 <tr>
