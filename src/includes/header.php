@@ -250,8 +250,8 @@
                 xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
                 
                 openedNotificationId = null;
-                window.location.reload();
             }
+            window.location.reload();
         });
     });
 
