@@ -50,6 +50,9 @@
           <a class="nav-link" aria-current="page" href="../professor_list/prof_list.php">Listado de profesores</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="../reponsible_list/resp_list.php">Listado de responsables</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" aria-current="page" href="../spp/spp_main.php">PPS</a>
         </li>
         <li class="nav-item">
