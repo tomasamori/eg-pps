@@ -60,7 +60,7 @@ if (isset($_SESSION['user_id'])) {
                             <?php
                             if ($role_student == $role_user) {
                                 $query = "SELECT * from document WHERE spp_id='$spp_id'";
-                            } elseif ($role_prof == $role_user) { 
+                            } elseif ($role_prof == $role_user) {
                                 $query = "SELECT * from document INNER JOIN spp_user su ON '$user_id' = su.mentor_id";
                             }
                             $result_docs = mysqli_query($conn, $query);
@@ -111,12 +111,17 @@ if (isset($_SESSION['user_id'])) {
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <strong>Correcciones: </strong>
-                                                <?php echo $row['correction'] ?>
+                                                <?php if (!empty($row['correction'])) { ?>
+                                                    <strong>Correcciones: </strong>
+                                                    <?php echo $row['correction'] ?>
+                                                <?php } else { ?>
+                                                    <p>Aún no hay correcciones</p>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <!--MODAL DE CORRECCIONES-->
                                 <div class="modal fade" id="correctionModal<?php echo $row['document_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -131,57 +136,71 @@ if (isset($_SESSION['user_id'])) {
                                                 <form action="document_correction.php" method="POST" enctype="multipart/form-data">
                                                     <div class="modal-body">
                                                         <input type="hidden" name="document_id" value="<?php echo $row['document_id']; ?>">
-                                                        <div class="form-group m-2">
-                                                            <input type="text" name="correction" class="form-control" placeholder="Correcciones" autofocus required>
-                                                        </div>
+                                                        <?php if (!empty($row['correction'])) { ?>
+                                                            <p>Este documento ya tiene correcciones.</p>
+                                                        <?php } else { ?>
+                                                            <div class="form-group m-2">
+                                                                <input type="text" name="correction" class="form-control" placeholder="Correcciones" autofocus required>
+                                                            </div>
+                                                        <?php } ?>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                                        <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
+                                                        <?php if (empty($row['correction'])) { ?>
+                                                            <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
+                                                        <?php } ?>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             <?php } ?>
                         </tbody>
                     </table>
                 </div>
                 <br>
                 <!--MODAL DE CARGAR DOCUMENTO-->
-                <div class="text-end">
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Nuevo Documento
-                    </button>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Documento</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <?php if ($role_student == $role_user) { ?>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Nuevo Documento
+                        </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Documento</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="document_create.php" method="POST" enctype="multipart/form-data">
+                                        <div class="modal-body">
+                                            <div class="form-group m-2">
+                                                <select name="type" class="form-control" required>
+                                                    <option value="">Selecciona el tipo de documento</option>
+                                                    <option value="Plan de trabajo">Plan de trabajo</option>
+                                                    <option value="Informe semanal">Informe semanal</option>
+                                                    <option value="Informe final">Informe final</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group m-2">
+                                                <input type="file" name="file" id="file" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
+                                        </div>
+                                    </form>
+
                                 </div>
-                                <form action="document_create.php" method="POST" enctype="multipart/form-data">
-                                    <div class="modal-body">
-                                        <div class="form-group m-2">
-                                            <input type="text" name="type" class="form-control" placeholder="Título del Documento" autofocus required>
-                                        </div>
-                                        <div class="form-group m-2">
-                                            <input type="file" name="file" id="file" class="form-control" required>
-                                        </div>
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                        <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
-                                    </div>
-                                </form>
                             </div>
-
                         </div>
-                    </div>
 
-                </div>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>
