@@ -15,8 +15,19 @@
                     Profesores Disponibles
                 </h2>
                 <table class="table">
+                    
                     <tbody>
                         <?php
+                        if(!empty($_REQUEST["page_num"])){
+                            $_REQUEST["page_num"] = $_REQUEST["page_num"];
+                        }else{
+                            $_REQUEST["page_num"]='1';
+                        }
+
+                        if($_REQUEST["page_num"] == ""){
+                            $_REQUEST["page_num"] = "1";
+                        }
+                    
                         $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
                         $result = $conn->query($query);
                         if ($result && $result->num_rows > 0) {
@@ -41,7 +52,20 @@
                                             HAVING 
                                             COALESCE(SUM(spp_status = 'in course'), 0) < 10";
                                                                 
-                            $result_users = mysqli_query($conn, $query);
+                            $count_users = mysqli_query($conn, $query);
+                            $num_rows = $count_users->num_rows;
+                            $prof_per_page = '6';
+                            $page_num = $_REQUEST["page_num"];
+                            if(is_numeric($page_num)){
+                                $start = (($page_num -1 ) * $prof_per_page);
+                            }
+                            else{
+                                $start=0;
+                            }
+                            $query .= " LIMIT $start, $prof_per_page";
+                            $result_users=mysqli_query($conn, $query);
+                            $pages = ceil($num_rows/$prof_per_page);
+
                         } else {
                             $message = 'No se encontró el rol "Profesor"';
                         }
@@ -60,7 +84,10 @@
                                 </td>
                             </tr>
 
-                            <div class="modal fade" id="exampleModal<?php echo $row['user_id']; ?>" tabindex="-1"
+                            
+
+                        <?php } ?>
+                        <div class="modal fade" id="exampleModal<?php echo $row['user_id']; ?>" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -90,10 +117,45 @@
                                     </div>
                                 </div>
                             </div>
-
-                        <?php } ?>
                     </tbody>
                 </table>
+                <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
+    <li class="page-item">
+        <?php
+        if($_REQUEST["page_num"] == "1" ){ 
+            $_REQUEST["page_num"] == "0";
+            echo "";
+        } else {
+            if ($page_num > 1)
+                $prev_page = $_REQUEST["page_num"] - 1;
+                echo "<a class='page-link' aria-label='Previous' href='prof_list.php?page_num=1'><span aria-hidden='true'>&laquo;</span><span class='sr-only'>Previous</span></a>";
+                echo "<li class='page-item '><a class='page-link' href='prof_list.php?page_num=". ($page_num - 1) ."' >".$prev_page."</a></li>"; 
+        }
+        echo "<li class='page-item active'><a class='page-link' >" .$_REQUEST["page_num"]. "</a></li>";
+        
+        // Corregimos la asignación de las variables $next_page y $last_page
+        $next_page = $_REQUEST["page_num"] + 1;
+        $last_page = ceil($num_rows / $prof_per_page);
+        
+        if ($last_page == $_REQUEST["page_num"] + 1 ) {
+            $last_page = "";
+        }
+        
+        if ($page_num < $pages && $pages > 1) {
+            echo "<li class='page-item'><a class='page-link' href='prof_list.php?page_num=". ($page_num + 1) ."'>".$next_page."</a></li>";
+        }
+        if ($last_page == "") {
+            $last_page = 1; // Establezco un valor predeterminado si $last_page es una cadena vacía
+        }
+
+        $last_page = ceil($last_page);
+        
+        if ($page_num < $pages && $pages > 1) {
+            echo "<li class='page-item'><a class='page-link' aria-label='Next' href='prof_list.php?page_num=". ceil($last_page) ."'><span aria-hidden='true'>&raquo;</span><span class='sr-only'>Next</span></a></li>";
+        }
+        ?>
+    </li>
+</ul> 
             </div>
         </div>
     </div>
