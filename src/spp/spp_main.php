@@ -69,7 +69,7 @@ include("../includes/header.php")
                                 $query.=" WHERE spp_user.mentor_id = '$user_id'";
                                 break;
                             case 'Responsable':
-                                $query .= "WHERE spp.status = 'unasigned'";
+                                $query .= "WHERE spp.status = 'unasigned' OR spp_user.supervisor_id = '$user_id'";
                                 break;
                             default:
                                 break;
@@ -87,6 +87,13 @@ include("../includes/header.php")
                                     <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['spp_id']; ?>">
                                         Detalles
                                     </button>
+                                    <?php 
+                                        
+                                    if($role_name = 'Responsable' && $row['status'] = 'unasigned'): ?>
+                                        
+                                        <!-- solo aparecera este boton si el usuario es un Responsable' -->
+                                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['spp_id']; ?>">Asignar Prof.</button>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
 
