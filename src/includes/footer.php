@@ -12,7 +12,7 @@
     }
 </style>
 
-<footer class="text-center bg-dark text-white py-2">
+<footer class="text-center bg-dark text-white pt-2">
     <div class="container">
         <section class="mb-2">
             <img src="../img/Footer-UTN.png" alt="Logo-UTN" class="navbar-brand-img mr-1 img-fluid"
