@@ -26,10 +26,10 @@ if (!empty ($_POST['email']) && !empty ($_POST['password']) && !empty ($_POST['c
     if ($result && $result->num_rows > 0) {
         $message = 'El correo electrónico ya está registrado';
     } else {
-        if ($_POST['password'] !== $_POST['confirm_password']) {
-            $message = 'Las contraseñas no coinciden';
-        } elseif (strlen($_POST['password']) < 8 || !preg_match('/[a-zA-Z]/', $_POST['password']) || !preg_match('/\d/', $_POST['password'])) {
+        if (strlen($_POST['password']) < 8 || !preg_match('/[a-zA-Z]/', $_POST['password']) || !preg_match('/\d/', $_POST['password'])) {
             $message = 'La contraseña debe tener al menos 8 caracteres y contener al menos 1 letra y 1 número';
+        } elseif ($_POST['password'] !== $_POST['confirm_password']) {
+            $message = 'Las contraseñas no coinciden';
         } else {
             $query = "SELECT role_id FROM role WHERE name = 'Alumno'";
             $result = $conn->query($query);
@@ -76,7 +76,7 @@ include ('../includes/header.php'); ?>
                     </div>
                     <div class="form-group m-2">
                         <input type="password" name="confirm_password" class="form-control"
-                            placeholder="Confirme su Contraseña" required value="<?php echo $confirmPasswordValue; ?>">
+                            placeholder="Repetir Contraseña" required value="<?php echo $confirmPasswordValue; ?>">
                     </div>
                     <div class="form-group m-2">
                         <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required
