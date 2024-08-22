@@ -1,14 +1,18 @@
 <style>
-    footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
+    html,
+    body {
+        height: 100%;
+        margin: 0;
     }
 
     body {
-        position: relative;
-        min-height: 100vh;
-        padding-bottom: 60.5px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    footer {
+        margin-top: auto;
+        width: 100%;
     }
 </style>
 
@@ -62,11 +66,13 @@
     </div>
 </footer>
 
+</body>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
-</body>
+
 </html>
