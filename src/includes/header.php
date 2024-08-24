@@ -125,6 +125,7 @@
             </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="../user/user_edit.php">Editar Perfil</a></li>
+              <li><a class="dropdown-item" href="../crud/crud.php">Portal Administrativo</a></li> <!-- Esto solo lo deberían ver los administradores -->
               <li><a class="dropdown-item " href="../auth/logout.php">Cerrar Sesión</a></li>
             </ul>
           </div>
