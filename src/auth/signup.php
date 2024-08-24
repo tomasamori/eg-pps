@@ -88,13 +88,17 @@ include('../includes/header.php'); ?>
                         <input type="email" name="email" class="form-control" placeholder="Email" autofocus required
                             value="<?php echo $emailValue; ?>">
                     </div>
-                    <div class="form-group m-3">
-                        <input type="password" name="password" class="form-control" placeholder="Contraseña" required
-                            value="<?php echo $passwordValue; ?>">
+                    <div class="form-group m-3 mb-0 position-relative">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required value="<?php echo $passwordValue; ?>">
+                        <button type="button" id="togglePassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                            <i id="toggleIcon" class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
-                    <div class="form-group m-3">
-                        <input type="password" name="confirm_password" class="form-control"
-                            placeholder="Repetir Contraseña" required value="<?php echo $confirmPasswordValue; ?>">
+                    <div class="form-group m-3 mb-0 position-relative">
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Repetir Contraseña" required value="<?php echo $confirmPasswordValue; ?>">
+                        <button type="button" id="toggleConfirmPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                            <i id="toggleConfirmIcon" class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
                     <div class="form-group m-3">
                         <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required
@@ -154,5 +158,41 @@ include('../includes/header.php'); ?>
         </div>
     </div>
 </div>
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        } else {
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        }
+    });
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPassword = document.getElementById('confirm_password');
+    const toggleConfirmIcon = document.getElementById('toggleConfirmIcon');
+
+    toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPassword.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleConfirmIcon.classList.remove("fa-eye-slash");
+            toggleConfirmIcon.classList.add("fa-eye");
+        } else {
+            toggleConfirmIcon.classList.remove("fa-eye");
+            toggleConfirmIcon.classList.add("fa-eye-slash");
+        }
+    });
+</script>
 
 <?php include('../includes/footer.php'); ?>
