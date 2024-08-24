@@ -41,6 +41,10 @@ include('../includes/header.php'); ?>
         background-color: #49AD6D;
         border-color: #49AD6D;
     }
+
+    .no-underline {
+        text-decoration: none;
+    }
 </style>
 
 <div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
@@ -72,7 +76,7 @@ include('../includes/header.php'); ?>
                         </div>
                     <?php endif; ?>
                     <div class="text-center mb-3">
-                        <p class="fs-6 mb-0">¿No tienes una cuenta? <a href="signup.php">Regístrate aquí</a></p>
+                        <p class="fs-6 mb-0">¿No tienes una cuenta? <a class="no-underline" href="signup.php">Regístrate aquí</a></p>
                     </div>
                 </form>
             </div>
