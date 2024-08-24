@@ -48,7 +48,7 @@ include('../includes/header.php'); ?>
         <div class="col-md-3">
             <div class="card card-body shadow-lg">
                 <form action="login.php" method="POST">
-                    <div class="fs-5 fw-bold text-center pb-3">
+                    <div class="fs-5 fw-bold text-center mt-2 mb-4">
                         Inicio de Sesión
                     </div>
                     <div class="form-group m-3">
