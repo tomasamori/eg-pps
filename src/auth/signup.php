@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset ($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id'])) {
     header('Location: ../index.php');
     exit;
 }
@@ -10,13 +10,13 @@ require '../db.php';
 
 $message = '';
 
-$emailValue = isset ($_POST['email']) ? $_POST['email'] : '';
-$passwordValue = isset ($_POST['password']) ? $_POST['password'] : '';
-$confirmPasswordValue = isset ($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
-$nameValue = isset ($_POST['name']) ? $_POST['name'] : '';
-$careerIdValue = isset ($_POST['career_id']) ? $_POST['career_id'] : '';
+$emailValue = isset($_POST['email']) ? $_POST['email'] : '';
+$passwordValue = isset($_POST['password']) ? $_POST['password'] : '';
+$confirmPasswordValue = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
+$nameValue = isset($_POST['name']) ? $_POST['name'] : '';
+$careerIdValue = isset($_POST['career_id']) ? $_POST['career_id'] : '';
 
-if (!empty ($_POST['email']) && !empty ($_POST['password']) && !empty ($_POST['confirm_password'])) {
+if (!empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['confirm_password'])) {
     $query = "SELECT email FROM user WHERE email = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('s', $_POST['email']);
@@ -57,28 +57,42 @@ if (!empty ($_POST['email']) && !empty ($_POST['password']) && !empty ($_POST['c
     }
 }
 
-include ('../includes/header.php'); ?>
+include('../includes/header.php'); ?>
+
+<style>
+    .green-btn {
+        color: white;
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .green-btn:hover {
+        background-color: #49AD6D;
+        border-color: #49AD6D;
+    }
+</style>
 
 <div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
-    <div class="row justify-content-center align-items-center" style="height: 80vh;">
+    <div class="row justify-content-center align-items-center mt-2 mb-2" style="min-height: 80vh;">
         <div class="col-md-3">
             <div class="card card-body text-center shadow-lg">
                 <form action="signup.php" method="POST">
-                    <img src="../img/utn-logo.png" alt="Logo UTN" class="navbar-brand-img mt-4 mb-4 img-fluid"
-                        style="max-height: 70px;">
-                    <div class="form-group m-2">
+                    <div class="fs-5 fw-bold text-center mt-2 mb-4">
+                        Crear un Usuario
+                    </div>
+                    <div class="form-group m-3">
                         <input type="email" name="email" class="form-control" placeholder="Email" autofocus required
                             value="<?php echo $emailValue; ?>">
                     </div>
-                    <div class="form-group m-2">
+                    <div class="form-group m-3">
                         <input type="password" name="password" class="form-control" placeholder="Contraseña" required
                             value="<?php echo $passwordValue; ?>">
                     </div>
-                    <div class="form-group m-2">
+                    <div class="form-group m-3">
                         <input type="password" name="confirm_password" class="form-control"
                             placeholder="Repetir Contraseña" required value="<?php echo $confirmPasswordValue; ?>">
                     </div>
-                    <div class="form-group m-2">
+                    <div class="form-group m-3">
                         <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required
                             value="<?php echo $nameValue; ?>">
                     </div>
@@ -86,18 +100,18 @@ include ('../includes/header.php'); ?>
                     $query = "SELECT * FROM career";
                     $result_career = mysqli_query($conn, $query);
                     ?>
-                    <div class="form-group m-2">
+                    <div class="form-group m-3 mb-0">
                         <select name="career_id" class="form-control" required>
                             <option value="">Seleccione una carrera</option>
                             <?php while ($row = mysqli_fetch_assoc($result_career)) { ?>
                                 <option value="<?php echo $row['career_id']; ?>" <?php if ($row['career_id'] == $careerIdValue)
-                                       echo 'selected'; ?>>
+                                                                                        echo 'selected'; ?>>
                                     <?php echo $row['name']; ?>
                                 </option>
                             <?php } ?>
                         </select>
                     </div>
-                    <?php if (!empty ($message)): ?>
+                    <?php if (!empty($message)): ?>
                         <br>
                         <?php if ($message === 'Usuario creado exitosamente. Redirigiendo...'): ?>
                             <div class="row justify-content-center align-items-center">
@@ -120,18 +134,21 @@ include ('../includes/header.php'); ?>
 
                     <?php if ($message === 'Usuario creado exitosamente. Redirigiendo...'): ?>
                         <script>
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 window.location.href = 'login.php';
                             }, 4000);
                         </script>
                     <?php endif; ?>
-                    <br>
-                    <input type="submit" class="btn btn-success btn-block mx-auto d-block" name="signup"
-                        value="Registrarse">
+                    <div class="form-group m-3">
+                        <input type="submit" class="btn green-btn d-block w-100" name="signup" value="Registrarse">
+                    </div>
+                    <div class="text-center mb-3">
+                        <p class="fs-6 mb-0">¿Ya tienes una cuenta? <a href="login.php">Ingresar</a></p>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<?php include ('../includes/footer.php'); ?>
+<?php include('../includes/footer.php'); ?>
