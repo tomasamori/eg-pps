@@ -124,8 +124,8 @@
               <i class="fa-solid fa-user"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item " href="../auth/logout.php">Cerrar Sesión</a></li>
               <li><a class="dropdown-item" href="../user/user_edit.php">Editar Perfil</a></li>
+              <li><a class="dropdown-item " href="../auth/logout.php">Cerrar Sesión</a></li>
             </ul>
           </div>
 
@@ -153,109 +153,109 @@
     </div>
   </div>
 
-<script>
-  document.getElementById("mark-all-as-read").addEventListener("click", function(event) {
-    event.preventDefault();
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "../notification/mark_all_as_read.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        var response = xhr.responseText;
-        if (response === "success") {
-          alert("Todas las notificaciones han sido marcadas como leídas.");
-          window.location.reload();
-        } else {
-          alert("Hubo un error al marcar las notificaciones como leídas. Por favor, inténtalo de nuevo más tarde.");
-        }
-      }
-    };
-    xhr.send();
-  });
-
-  var deleteButtons = document.querySelectorAll(".delete-notification");
-  deleteButtons.forEach(function(button) {
-    button.addEventListener("click", function(event) {
+  <script>
+    document.getElementById("mark-all-as-read").addEventListener("click", function(event) {
       event.preventDefault();
-      var notificationId = this.getAttribute("data-notification-id");
-      var confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta notificación?");
-      if (confirmDelete) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../notification/notification_delete.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = xhr.responseText;
-            if (response === "success") {
-              alert("La notificación ha sido eliminada correctamente.");
-              window.location.reload();
-            } else {
-              alert("Hubo un error al eliminar la notificación. Por favor, inténtalo de nuevo más tarde.");
-            }
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "../notification/mark_all_as_read.php", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = xhr.responseText;
+          if (response === "success") {
+            alert("Todas las notificaciones han sido marcadas como leídas.");
+            window.location.reload();
+          } else {
+            alert("Hubo un error al marcar las notificaciones como leídas. Por favor, inténtalo de nuevo más tarde.");
           }
-        };
-        xhr.send("notification_id=" + encodeURIComponent(notificationId));
-      }
+        }
+      };
+      xhr.send();
     });
-  });
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var openedNotificationId;
-
-    var notificationLinks = document.querySelectorAll('.notification-link');
-    notificationLinks.forEach(function(link) {
-      link.addEventListener('click', function(event) {
+    var deleteButtons = document.querySelectorAll(".delete-notification");
+    deleteButtons.forEach(function(button) {
+      button.addEventListener("click", function(event) {
         event.preventDefault();
-        openedNotificationId = this.getAttribute('data-notification-id');
-        var modal = new bootstrap.Modal(document.getElementById('notificationModal'));
-        modal.show();
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../notification/get_notification_message.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = xhr.responseText;
-            if (response) {
-              document.getElementById('notificationMessage').textContent = response;
-            } else {
-              alert("Error al obtener el mensaje de la notificación.");
+        var notificationId = this.getAttribute("data-notification-id");
+        var confirmDelete = confirm("¿Estás seguro de que deseas eliminar esta notificación?");
+        if (confirmDelete) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "../notification/notification_delete.php", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = xhr.responseText;
+              if (response === "success") {
+                alert("La notificación ha sido eliminada correctamente.");
+                window.location.reload();
+              } else {
+                alert("Hubo un error al eliminar la notificación. Por favor, inténtalo de nuevo más tarde.");
+              }
             }
-          }
-        };
-        xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+          };
+          xhr.send("notification_id=" + encodeURIComponent(notificationId));
+        }
       });
     });
 
-    var notificationModal = document.getElementById('notificationModal');
-    notificationModal.addEventListener('hidden.bs.modal', function() {
-      document.getElementById('notificationMessage').textContent = "";
-      document.body.classList.remove('modal-open');
-      var backdrop = document.querySelector('.modal-backdrop');
-      if (backdrop) {
-        backdrop.parentNode.removeChild(backdrop);
-      }
-      if (openedNotificationId) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../notification/mark_as_read.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = xhr.responseText;
-            if (response === "success") {
-              var notificationElement = document.querySelector('.notification-link[data-notification-id="' + openedNotificationId + '"]');
-              if (notificationElement) {
-                notificationElement.classList.remove('text-bold');
-              }
-            } else {
-              alert("Error al marcar la notificación como leída.");
-            }
-          }
-        };
-        xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+    document.addEventListener('DOMContentLoaded', function() {
+      var openedNotificationId;
 
-        openedNotificationId = null;
-      }
-      window.location.reload();
+      var notificationLinks = document.querySelectorAll('.notification-link');
+      notificationLinks.forEach(function(link) {
+        link.addEventListener('click', function(event) {
+          event.preventDefault();
+          openedNotificationId = this.getAttribute('data-notification-id');
+          var modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+          modal.show();
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "../notification/get_notification_message.php", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = xhr.responseText;
+              if (response) {
+                document.getElementById('notificationMessage').textContent = response;
+              } else {
+                alert("Error al obtener el mensaje de la notificación.");
+              }
+            }
+          };
+          xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+        });
+      });
+
+      var notificationModal = document.getElementById('notificationModal');
+      notificationModal.addEventListener('hidden.bs.modal', function() {
+        document.getElementById('notificationMessage').textContent = "";
+        document.body.classList.remove('modal-open');
+        var backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+          backdrop.parentNode.removeChild(backdrop);
+        }
+        if (openedNotificationId) {
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "../notification/mark_as_read.php", true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = xhr.responseText;
+              if (response === "success") {
+                var notificationElement = document.querySelector('.notification-link[data-notification-id="' + openedNotificationId + '"]');
+                if (notificationElement) {
+                  notificationElement.classList.remove('text-bold');
+                }
+              } else {
+                alert("Error al marcar la notificación como leída.");
+              }
+            }
+          };
+          xhr.send("notification_id=" + encodeURIComponent(openedNotificationId));
+
+          openedNotificationId = null;
+        }
+        window.location.reload();
+      });
     });
-  });
-</script>
+  </script>
