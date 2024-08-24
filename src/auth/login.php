@@ -72,7 +72,7 @@ include('../includes/header.php'); ?>
                         </div>
                     <?php endif; ?>
                     <div class="text-center mb-3">
-                        <p class="fs-6 mb-0">¿No tienes una cuenta? <a href="register.php">Regístrate aquí</a></p>
+                        <p class="fs-6 mb-0">¿No tienes una cuenta? <a href="signup.php">Regístrate aquí</a></p>
                     </div>
                 </form>
             </div>
