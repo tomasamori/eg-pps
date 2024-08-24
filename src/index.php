@@ -37,13 +37,13 @@
         }
     }
 
-    .bellow-btn a {
+    .green-btn a {
         color: white;
         background-color: #3aa661;
         border-color: #3aa661;
     }
 
-    .bellow-btn a:hover {
+    .green-btn a:hover {
         background-color: #49AD6D;
         border-color: #49AD6D;
     }
@@ -97,7 +97,7 @@
     </div>
 
     <div class="text-center mt-3">
-        <div class="bellow-btn">
+        <div class="green-btn">
             <a href="./auth/signup.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
         </div>
     </div>
