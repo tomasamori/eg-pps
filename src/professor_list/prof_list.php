@@ -1,164 +1,188 @@
-<?php session_start(); ?>
-<?php include ("../db.php") ?>
-<?php include ("../includes/header.php") ?>
+<?php
+session_start();
+include("../includes/header.php");
+include("../db.php");
 
-<div class="container p-4 bg-light">
+function getTotalProfessors($conn, $role_id, $student_id = null)
+{
+    $query = "SELECT COUNT(DISTINCT user.user_id) AS total 
+              FROM user 
+              INNER JOIN career ON user.career_id = career.career_id 
+              LEFT JOIN spp_user ON spp_user.mentor_id = user.user_id
+              LEFT JOIN spp ON spp_user.spp_id = spp.spp_id
+              WHERE role_id = ?";
+
+    if ($student_id) {
+        $query .= " AND user.career_id = (SELECT career_id FROM user WHERE user_id = ?)";
+    }
+
+    $stmt = $conn->prepare($query);
+    if ($student_id) {
+        $stmt->bind_param("ii", $role_id, $student_id);
+    } else {
+        $stmt->bind_param("i", $role_id);
+    }
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['total'];
+}
+
+$role_id = null;
+$query = "SELECT role_id FROM role WHERE name = 'Profesor'";
+$result = $conn->query($query);
+if ($result && $result->num_rows > 0) {
+    $role_id = $result->fetch_assoc()['role_id'];
+}
+
+// Get the total number of professors
+$student_id = $_SESSION['user_id'] ?? null;
+$total_professors = getTotalProfessors($conn, $role_id, $student_id);
+
+// Pagination config
+$prof_per_page = 6;
+$page_num = $_REQUEST['page_num'] ?? 1;
+$start = ($page_num - 1) * $prof_per_page;
+$total_pages = ceil($total_professors / $prof_per_page);
+
+// Get professors
+$query = "SELECT user.user_id, user.name, user.email, user.photo, career.name AS career_name, 
+                 COALESCE(SUM(spp.status = 'En proceso'), 0) AS spp_count
+          FROM user 
+          INNER JOIN career ON user.career_id = career.career_id 
+          LEFT JOIN spp_user ON spp_user.mentor_id = user.user_id
+          LEFT JOIN spp ON spp_user.spp_id = spp.spp_id
+          WHERE role_id = ?";
+
+if ($student_id) {
+    $query .= " AND user.career_id = (SELECT career_id FROM user WHERE user_id = ?)";
+}
+
+$query .= " GROUP BY user.user_id 
+            HAVING spp_count < 10
+            LIMIT ?, ?";
+
+$stmt = $conn->prepare($query);
+if ($student_id) {
+    $stmt->bind_param("iiii", $role_id, $student_id, $start, $prof_per_page);
+} else {
+    $stmt->bind_param("iii", $role_id, $start, $prof_per_page);
+}
+$stmt->execute();
+$result_users = $stmt->get_result();
+?>
+
+<style>
+    body {
+        background-color: #f3f5fc;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .table th {
+        color: white;
+        background-color: #3aa661;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f3f9;
+    }
+
+    .pagination .page-link {
+        color: white;
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .pagination .page-item.active .page-link {
+        color: #3aa661;
+        background-color: white;
+        border-color: #3aa661;
+    }
+
+    .pagination .page-link:hover {
+        color: white;
+        background-color: #2f8b4f;
+        border-color: #2f8b4f;
+    }
+
+    .table th,
+    .table td {
+        width: 33.33%;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Profesores Disponibles</h1>
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-body">
-                <h2 class="text-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor"
-                        class="bi bi-file-earmark-person-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0m2 5.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-.245S4 12 8 12s5 1.755 5 1.755" />
-                    </svg>
-                    Profesores Disponibles
-                </h2>
-                <table class="table">
-                    
-                    <tbody>
-                        <?php
-                        if(!empty($_REQUEST["page_num"])){
-                            $_REQUEST["page_num"] = $_REQUEST["page_num"];
-                        }else{
-                            $_REQUEST["page_num"]='1';
-                        }
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Profesor</th>
+                        <th>Carrera</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result_users->fetch_assoc()) { ?>
+                        <tr class="align-middle">
+                            <td>
+                                <img src="<?php echo htmlspecialchars($row['photo'], ENT_QUOTES, 'UTF-8'); ?>" width="45" height="45" class="rounded-circle me-3">
+                                <?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars($row['career_name'], ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8'); ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
 
-                        if($_REQUEST["page_num"] == ""){
-                            $_REQUEST["page_num"] = "1";
-                        }
-                    
-                        $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
-                        $result = $conn->query($query);
-                        if ($result && $result->num_rows > 0) {
-                            $row = $result->fetch_assoc();
-                            $role_id = $row['role_id'];
+            <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
+                <?php if ($page_num > 1) { ?>
+                    <li class="page-item">
+                        <a class="page-link" href="prof_list.php?page_num=1" aria-label="Primera página">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="prof_list.php?page_num=<?php echo $page_num - 1; ?>" aria-label="Anterior">
+                            <span aria-hidden="true"><?php echo $page_num - 1; ?></span>
+                        </a>
+                    </li>
+                <?php } ?>
 
-                            $query = "SELECT user_id, user.name, user.email, career.name AS career_name, spp.status AS spp_status
-                                            FROM user 
-                                            INNER JOIN career ON user.career_id = career.career_id 
-                                            LEFT JOIN spp_user ON spp_user.mentor_id = user.user_id
-                                            LEFT JOIN spp ON spp_user.spp_id = spp.spp_id
+                <li class="page-item active"><a class="page-link"><?php echo $page_num; ?></a></li>
 
-                                            WHERE role_id = $role_id";
-                            //En caso de que el usuario esté logueado
-                            if (isset($_SESSION['user_id'])) {
-                                $student_id = $_SESSION['user_id'];
-                                $query .= " AND user.career_id = (SELECT user.career_id FROM user WHERE user.user_id = '$student_id')";
-                            }
-                            //Trae los docentes que tengan menos de 10 pps
-                            $query .= " GROUP BY 
-                                            user.user_id
-                                            HAVING 
-                                            COALESCE(SUM(spp_status = 'in course'), 0) < 10";
-                                                                
-                            $count_users = mysqli_query($conn, $query);
-                            $num_rows = $count_users->num_rows;
-                            $prof_per_page = '6';
-                            $page_num = $_REQUEST["page_num"];
-                            if(is_numeric($page_num)){
-                                $start = (($page_num -1 ) * $prof_per_page);
-                            }
-                            else{
-                                $start=0;
-                            }
-                            $query .= " LIMIT $start, $prof_per_page";
-                            $result_users=mysqli_query($conn, $query);
-                            $pages = ceil($num_rows/$prof_per_page);
-
-                        } else {
-                            $message = 'No se encontró el rol "Profesor"';
-                        }
-
-                        while ($row = mysqli_fetch_array($result_users)) { ?>
-                            <tr>
-                                <td style="font-size: 20px;"><img src="../img/utn-logo.png"
-                                        width="45">&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <?php echo $row['name'] ?>
-                                </td>
-                                <td class="text-end">
-                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal<?php echo $row['user_id']; ?>">
-                                        Detalles
-                                    </button>
-                                </td>
-                            </tr>
-
-                            <div class="modal fade" id="exampleModal<?php echo $row['user_id']; ?>" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                <?php echo $row['name'] ?>
-                                            </h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-5 text-center">
-                                                    <img src="../img/utn-logo.png" width="70">
-                                                </div>
-                                                <div class="col-md-7">
-                                                    <strong>Correo</strong>
-                                                    <br>
-                                                    <?php echo $row['email'] ?>
-                                                    <br>
-                                                    <strong>Carrera</strong>
-                                                    <br>
-                                                    <?php echo $row['career_name'] ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                            
-
-                        <?php } ?>
-                        
-                    </tbody>
-                </table>
-                <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
-    <li class="page-item">
-        <?php
-        if($_REQUEST["page_num"] == "1" ){ 
-            $_REQUEST["page_num"] == "0";
-            echo "";
-        } else {
-            if ($page_num > 1)
-                $prev_page = $_REQUEST["page_num"] - 1;
-                echo "<a class='page-link' aria-label='Previous' href='prof_list.php?page_num=1'><span aria-hidden='true'>&laquo;</span><span class='sr-only'>Previous</span></a>";
-                echo "<li class='page-item '><a class='page-link' href='prof_list.php?page_num=". ($page_num - 1) ."' >".$prev_page."</a></li>"; 
-        }
-        echo "<li class='page-item active'><a class='page-link' >" .$_REQUEST["page_num"]. "</a></li>";
-        
-        // Corregimos la asignación de las variables $next_page y $last_page
-        $next_page = $_REQUEST["page_num"] + 1;
-        $last_page = ceil($num_rows / $prof_per_page);
-        
-        if ($last_page == $_REQUEST["page_num"] + 1 ) {
-            $last_page = "";
-        }
-        
-        if ($page_num < $pages && $pages > 1) {
-            echo "<li class='page-item'><a class='page-link' href='prof_list.php?page_num=". ($page_num + 1) ."'>".$next_page."</a></li>";
-        }
-        if ($last_page == "") {
-            $last_page = 1; // Establezco un valor predeterminado si $last_page es una cadena vacía
-        }
-
-        $last_page = ceil($last_page);
-        
-        if ($page_num < $pages && $pages > 1) {
-            echo "<li class='page-item'><a class='page-link' aria-label='Next' href='prof_list.php?page_num=". ceil($last_page) ."'><span aria-hidden='true'>&raquo;</span><span class='sr-only'>Next</span></a></li>";
-        }
-        ?>
-    </li>
-</ul> 
-            </div>
+                <?php if ($page_num < $total_pages) { ?>
+                    <li class="page-item">
+                        <a class="page-link" href="prof_list.php?page_num=<?php echo $page_num + 1; ?>" aria-label="Siguiente">
+                            <span aria-hidden="true"><?php echo $page_num + 1; ?></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="prof_list.php?page_num=<?php echo $total_pages; ?>" aria-label="Última página">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
         </div>
     </div>
 </div>
 
-<?php include ("../includes/footer.php") ?>
+<?php include("../includes/footer.php"); ?>

@@ -31,3 +31,6 @@ vendor
 
 # Ignore environment files
 .env
+
+# Ignore profile images
+/src/img/profiles/
