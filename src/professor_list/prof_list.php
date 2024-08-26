@@ -84,10 +84,7 @@
                                 </td>
                             </tr>
 
-                            
-
-                        <?php } ?>
-                        <div class="modal fade" id="exampleModal<?php echo $row['user_id']; ?>" tabindex="-1"
+                            <div class="modal fade" id="exampleModal<?php echo $row['user_id']; ?>" tabindex="-1"
                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -116,7 +113,10 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>                            
+
+                        <?php } ?>
+                        
                     </tbody>
                 </table>
                 <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
