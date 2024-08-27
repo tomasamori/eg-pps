@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: db:3306
--- Tiempo de generación: 26-03-2024 a las 20:31:32
--- Versión del servidor: 8.0.36
--- Versión de PHP: 8.2.16
+-- Host: db:3306
+-- Generation Time: Aug 27, 2024 at 10:25 PM
+-- Server version: 8.0.39
+-- PHP Version: 8.2.22
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `eg-pps`
+-- Database: `eg-pps`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `career`
+-- Table structure for table `career`
 --
 
 CREATE TABLE `career` (
@@ -34,7 +34,7 @@ CREATE TABLE `career` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `career`
+-- Dumping data for table `career`
 --
 
 INSERT INTO `career` (`career_id`, `name`, `deleted`) VALUES
@@ -47,14 +47,14 @@ INSERT INTO `career` (`career_id`, `name`, `deleted`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `document`
+-- Table structure for table `document`
 --
 
 CREATE TABLE `document` (
   `document_id` int NOT NULL,
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `correction` text CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL DEFAULT 'Pendiente',
+  `correction` text CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `spp_id` int NOT NULL
@@ -63,7 +63,7 @@ CREATE TABLE `document` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `notification`
+-- Table structure for table `notification`
 --
 
 CREATE TABLE `notification` (
@@ -71,15 +71,25 @@ CREATE TABLE `notification` (
   `sender_id` int NOT NULL,
   `receiver_id` int NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL DEFAULT 'No leída',
   `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`notification_id`, `sender_id`, `receiver_id`, `timestamp`, `status`, `message`, `deleted`) VALUES
+(1, 5, 11, '2024-08-22 18:42:48', 'Leída', 'Pelotudo de mierda', 0),
+(2, 5, 11, '2024-08-22 18:45:32', 'Leída', 'Pelotudo de mierda', 0),
+(3, 5, 11, '2024-08-22 18:45:42', 'Leída', 'Pelotudo de mierda', 1),
+(4, 5, 11, '2024-08-22 18:46:10', 'Leída', 'Todo boludo sos', 1);
+
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `role`
+-- Table structure for table `role`
 --
 
 CREATE TABLE `role` (
@@ -89,7 +99,7 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `role`
+-- Dumping data for table `role`
 --
 
 INSERT INTO `role` (`role_id`, `name`, `deleted`) VALUES
@@ -100,7 +110,7 @@ INSERT INTO `role` (`role_id`, `name`, `deleted`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `spp`
+-- Table structure for table `spp`
 --
 
 CREATE TABLE `spp` (
@@ -112,7 +122,7 @@ CREATE TABLE `spp` (
   `organization_city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `organization_state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `organization_zip` int NOT NULL,
-  `organization_contact` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `organization_contact` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
@@ -120,7 +130,7 @@ CREATE TABLE `spp` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `spp`
+-- Dumping data for table `spp`
 --
 
 INSERT INTO `spp` (`spp_id`, `organization_name`, `organization_email`, `organization_phone`, `organization_address`, `organization_city`, `organization_state`, `organization_zip`, `organization_contact`, `start_date`, `end_date`, `status`, `deleted`) VALUES
@@ -141,7 +151,7 @@ INSERT INTO `spp` (`spp_id`, `organization_name`, `organization_email`, `organiz
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `spp_user`
+-- Table structure for table `spp_user`
 --
 
 CREATE TABLE `spp_user` (
@@ -153,7 +163,7 @@ CREATE TABLE `spp_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `spp_user`
+-- Dumping data for table `spp_user`
 --
 
 INSERT INTO `spp_user` (`spp_id`, `supervisor_id`, `mentor_id`, `student_id`, `deleted`) VALUES
@@ -172,7 +182,7 @@ INSERT INTO `spp_user` (`spp_id`, `supervisor_id`, `mentor_id`, `student_id`, `d
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -180,7 +190,7 @@ CREATE TABLE `user` (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `photo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci DEFAULT '../img/profiles/default.png',
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `reset_token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `reset_token_expires_at` datetime DEFAULT NULL,
@@ -189,38 +199,43 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_id`, `email`, `password`, `name`, `photo`, `deleted`, `reset_token`, `reset_token_expires_at`, `career_id`, `role_id`) VALUES
-(3, 'anom117utn@gmail.com', '$2y$10$A7zRC53ezr4ZNkPWnAnOFuib39N7y44YlRY7yD2z.mbgji4Ta4Jzy', 'Santiago', NULL, 0, NULL, NULL, 1, 2),
-(4, 'tomasamori@gmail.com', '$2y$10$1DObR9y8SAyVDdA2XFfLTu4Q5vh7Z57GwJest4xRQYaBFz78z2e0.', 'Tomás Amori', NULL, 0, NULL, NULL, 2, 2),
-(5, 'matiasmayor@gmail.com', '$2y$10$2oGdaM9ytSzPgyn/W2atWe.wiRlZ/o8EreJDRJELFphyXqlOeuZWm', 'Matías Mayor', NULL, 0, NULL, NULL, 2, 2),
-(6, 'manuelferrareto@gmail.com', '$2y$10$zv33sdTuMe31NeQZGCuJZuNAkUpy7euAMtk4.Q5NJ9XJRQvoCNHSu', 'Manuel Ferrareto', NULL, 0, NULL, NULL, 3, 2),
-(7, 'santiagoatombolini@gmail.com', '$2y$10$ZFHO4eRLDq6Ftz0.dbNONO45o260uUlIKk7AZsLS5MiZw1mNL4gC2', 'Santiago Tombolini', NULL, 0, NULL, NULL, 2, 1),
-(8, 'anom117utn@gmail.com', '$2y$10$f323D5jBY8u7WOiDPnRm4.y9uV.fpnhLeuXhODHJkXA2w09H18Ms2', 'Santiago', NULL, 0, NULL, NULL, 2, 1),
-(9, 'picho.utn@gmail.com', '123456789', 'picho', NULL, 0, NULL, NULL, NULL, 3),
-(10, 'matias.mayor99@gmail.com', '$2y$10$L5BaPgomPhVfyMv2AE12R.JL.f4BcYnvm1MADf8yM.kQAmOlgNtZi', 'Matias Mayor', NULL, 0, NULL, NULL, 2, 1);
+(3, 'anom117utn@gmail.com', '$2y$10$A7zRC53ezr4ZNkPWnAnOFuib39N7y44YlRY7yD2z.mbgji4Ta4Jzy', 'Santiago', '../img/profiles/default.png', 0, NULL, NULL, 1, 2),
+(4, 'tomasamori@gmail.com', '$2y$10$UM2y8lMBrNokq88paY0CSuDUejzVaW9m0SmBu9vWZBwZtj2oz//Dm', 'Tomás Amori', '../img/profiles/4.png', 0, NULL, NULL, 2, 2),
+(5, 'matiasmayor@gmail.com', '$2y$10$2oGdaM9ytSzPgyn/W2atWe.wiRlZ/o8EreJDRJELFphyXqlOeuZWm', 'Matías Mayor', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(6, 'manuelferrareto@gmail.com', '$2y$10$zv33sdTuMe31NeQZGCuJZuNAkUpy7euAMtk4.Q5NJ9XJRQvoCNHSu', 'Manuel Ferrareto', '../img/profiles/default.png', 0, NULL, NULL, 3, 2),
+(7, 'santiagoatombolini@gmail.com', '$2y$10$ZFHO4eRLDq6Ftz0.dbNONO45o260uUlIKk7AZsLS5MiZw1mNL4gC2', 'Santiago Tombolini', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(8, 'anom117utn@gmail.com', '$2y$10$f323D5jBY8u7WOiDPnRm4.y9uV.fpnhLeuXhODHJkXA2w09H18Ms2', 'Santiago', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(9, 'picho.utn@gmail.com', '123456789', 'picho', '../img/profiles/default.png', 0, NULL, NULL, NULL, 2),
+(10, 'matias.mayor99@gmail.com', '$2y$10$L5BaPgomPhVfyMv2AE12R.JL.f4BcYnvm1MADf8yM.kQAmOlgNtZi', 'Matias Mayor', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(11, 'tomas.amori@gmail.com', '$2y$10$Qo5ug/BtsWC0Ur10DI66pusAWNPsrE0XSLcdMBXaufUcV3np8f0n2', 'Tomás Amori', '../img/profiles/11.png', 0, NULL, NULL, 2, 2),
+(12, 'a@gmail.com', '$2y$10$7nO8qk/sE8HgfDNqDaClWeaB/j8iGjK./rVIcD1cppGmjzmxoVize', 'a e i o u', '../img/profiles/default.png', 0, NULL, NULL, 1, 2),
+(13, 'ae@gmail.com', '$2y$10$aNbWI8Ytm.efarxy6k7duOvgOXON82grKMneAh0O1Nk7iVUO.TZa6', 'roberto carlos', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(14, 'terrible@gmail.com', '$2y$10$KLUrVKgS7qSmQtD2CRE48O0y1x1ffjEjOBBCz4UUnuHlfUma1.sCS', 'terrible', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(15, 'toamori@gmail.com', '$2y$10$jHla5SoF08gnD34B2c9QVuaRxmE.UiHQO/ysUtdJ4ki33aCard62i', 'Roberto Carlos', '../img/profiles/default.png', 0, NULL, NULL, 1, 2);
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `career`
+-- Indexes for table `career`
 --
 ALTER TABLE `career`
   ADD PRIMARY KEY (`career_id`);
 
 --
--- Indices de la tabla `document`
+-- Indexes for table `document`
 --
 ALTER TABLE `document`
   ADD PRIMARY KEY (`document_id`),
   ADD KEY `spp_spp_id` (`spp_id`);
 
 --
--- Indices de la tabla `notification`
+-- Indexes for table `notification`
 --
 ALTER TABLE `notification`
   ADD PRIMARY KEY (`notification_id`,`receiver_id`),
@@ -228,19 +243,19 @@ ALTER TABLE `notification`
   ADD KEY `user_receiver_id` (`receiver_id`);
 
 --
--- Indices de la tabla `role`
+-- Indexes for table `role`
 --
 ALTER TABLE `role`
   ADD PRIMARY KEY (`role_id`);
 
 --
--- Indices de la tabla `spp`
+-- Indexes for table `spp`
 --
 ALTER TABLE `spp`
   ADD PRIMARY KEY (`spp_id`);
 
 --
--- Indices de la tabla `spp_user`
+-- Indexes for table `spp_user`
 --
 ALTER TABLE `spp_user`
   ADD PRIMARY KEY (`spp_id`,`student_id`) USING BTREE,
@@ -249,7 +264,7 @@ ALTER TABLE `spp_user`
   ADD KEY `user_student_id` (`student_id`);
 
 --
--- Indices de la tabla `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
@@ -258,64 +273,64 @@ ALTER TABLE `user`
   ADD KEY `role_role_id` (`role_id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `career`
+-- AUTO_INCREMENT for table `career`
 --
 ALTER TABLE `career`
   MODIFY `career_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `document`
+-- AUTO_INCREMENT for table `document`
 --
 ALTER TABLE `document`
   MODIFY `document_id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `notification`
+-- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `role`
+-- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
   MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `spp`
+-- AUTO_INCREMENT for table `spp`
 --
 ALTER TABLE `spp`
   MODIFY `spp_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT de la tabla `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `document`
+-- Constraints for table `document`
 --
 ALTER TABLE `document`
   ADD CONSTRAINT `document_spp_id_spp` FOREIGN KEY (`spp_id`) REFERENCES `spp` (`spp_id`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `notification`
+-- Constraints for table `notification`
 --
 ALTER TABLE `notification`
   ADD CONSTRAINT `user_receiver_id` FOREIGN KEY (`receiver_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `user_sender_id` FOREIGN KEY (`sender_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `spp_user`
+-- Constraints for table `spp_user`
 --
 ALTER TABLE `spp_user`
   ADD CONSTRAINT `spp_spp_id` FOREIGN KEY (`spp_id`) REFERENCES `spp` (`spp_id`) ON UPDATE CASCADE,
@@ -324,7 +339,7 @@ ALTER TABLE `spp_user`
   ADD CONSTRAINT `user_supervisor_id` FOREIGN KEY (`supervisor_id`) REFERENCES `user` (`user_id`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `user`
+-- Constraints for table `user`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `career_career_id` FOREIGN KEY (`career_id`) REFERENCES `career` (`career_id`) ON UPDATE CASCADE,
