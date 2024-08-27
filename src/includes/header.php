@@ -18,6 +18,17 @@
   .nav-link:hover {
     color: gray;
   }
+
+  .btn:focus {
+    outline: none;
+    background-color: #3F9B5E;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-control:focus {
+    border-color: #3aa661;
+    box-shadow: none;
+  }
 </style>
 
 <body>
