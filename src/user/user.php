@@ -2,10 +2,63 @@
 <?php include("../db.php") ?>
 <?php include("../includes/header.php") ?>
 
-<div class="container p-4">
+<style>
+    body {
+        background-color: #f3f5fc;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .table th {
+        color: white;
+        background-color: #3aa661;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f3f9;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .card-header {
+        color: white;
+        background-color: #3aa661;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        padding: 7px;
+    }
+
+    .btn-success {
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .btn-success:hover {
+        background-color: #339a4e;
+        border-color: #339a4e;
+    }
+</style>
+
+
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Gestión de Usuarios</h1>
     <div class="row">
         <div class="col-md-3">
-
             <?php if (isset($_SESSION['message'])) { ?>
                 <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show" role="alert">
                     <?= $_SESSION['message'] ?>
@@ -13,51 +66,55 @@
                 </div>
             <?php session_unset();
             } ?>
-            <div class="card card-body">
-
-                <form action="user_create.php" method="POST">
-                    <div class="form-group m-2">
-                        <input type="email" name="email" class="form-control" placeholder="Email" autofocus required>
-                    </div>
-                    <div class="form-group m-2">
-                        <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
-                    </div>
-                    <div class="form-group m-2">
-                        <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required>
-                    </div>
-                    <?php
-                    $query = "SELECT * FROM career";
-                    $result_career = mysqli_query($conn, $query);
-                    ?>
-                    <div class="form-group m-2">
-                        <select name="career_id" class="form-control" required>
-                            <option value="">Selecciona una carrera</option>
-                            <?php while ($row = mysqli_fetch_assoc($result_career)) { ?>
-                                <option value="<?php echo $row['career_id']; ?>"><?php echo $row['name']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <?php
-                    $query = "SELECT * FROM role";
-                    $result_role = mysqli_query($conn, $query);
-                    ?>
-                    <div class="form-group m-2">
-                        <select name="role_id" class="form-control" required>
-                            <option value="">Seleccione un rol</option>
-                            <?php while ($row = mysqli_fetch_assoc($result_role)) { ?>
-                                <option value="<?php echo $row['role_id']; ?>"><?php echo $row['name']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <br>
-                    <input type="submit" class="btn btn-success btn-block mx-auto d-block" name="user_create" value="Guardar Usuario">
-                </form>
-
-
+            <div class="card text-center">
+                <div class="card-header">
+                    Nuevo Usuario
+                </div>
+                <div class="card-body">
+                    <form action="user_create.php" method="POST">
+                        <div class="form-group m-2">
+                            <input type="email" name="email" class="form-control" placeholder="Email" autofocus required>
+                        </div>
+                        <div class="form-group m-2">
+                            <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+                        </div>
+                        <div class="form-group m-2">
+                            <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required>
+                        </div>
+                        <?php
+                        $query = "SELECT * FROM career";
+                        $result_career = mysqli_query($conn, $query);
+                        ?>
+                        <div class="form-group m-2">
+                            <select name="career_id" class="form-control" required>
+                                <option value="">Selecciona una carrera</option>
+                                <?php while ($row = mysqli_fetch_assoc($result_career)) { ?>
+                                    <option value="<?php echo $row['career_id']; ?>"><?php echo $row['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <?php
+                        $query = "SELECT * FROM role";
+                        $result_role = mysqli_query($conn, $query);
+                        ?>
+                        <div class="form-group m-2">
+                            <select name="role_id" class="form-control" required>
+                                <option value="">Seleccione un rol</option>
+                                <?php while ($row = mysqli_fetch_assoc($result_role)) { ?>
+                                    <option value="<?php echo $row['role_id']; ?>"><?php echo $row['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <br>
+                        <input type="submit" class="btn btn-success btn-block mx-auto d-block" name="user_create" value="Guardar Usuario">
+                    </form>
+                </div>
             </div>
+
+
         </div>
-        <div class="col-md-8">
-            <table class="table table-bordered">
+        <div class="col-md-9">
+            <table class="table table-striped table-hover">
                 <thead>
                     <tr class="text-center">
                         <th>ID</th>
@@ -94,8 +151,6 @@
                         </tr>
                     <?php } ?>
                 </tbody>
-
-
             </table>
         </div>
     </div>

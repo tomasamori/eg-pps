@@ -34,11 +34,43 @@ if (isset($_POST['update'])) {
 ?>
 
 <?php include("../includes/header.php") ?>
+
+<style>
+    .card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .card-header {
+        color: white;
+        background-color: #3aa661;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        padding: 7px;
+    }
+
+    .btn-success {
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .btn-success:hover {
+        background-color: #339a4e;
+        border-color: #339a4e;
+    }
+</style>
+
 <br>
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-md-4 mx-auto">
-            <div class="card card-body">
+        <div class="card text-center">
+        <div class="card-header">
+                    Editar Usuario
+                </div>
+            <div class="card-body">
                 <form action="user_update.php?user_id=<?php echo $_GET['user_id']; ?>" method="POST">
                     <div class="form-group m-2">
                         <input type="text" name="email" value="<?php echo $email ?>" class="form-control" placeholder="Actualizar email">
@@ -75,6 +107,7 @@ if (isset($_POST['update'])) {
                         Editar
                     </button>
                 </form>
+            </div>
             </div>
         </div>
     </div>
