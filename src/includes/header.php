@@ -29,6 +29,53 @@
     border-color: #3aa661;
     box-shadow: none;
   }
+
+  @media (max-width: 990px) {
+    .navbar-brand {
+      display: none;
+    }
+
+    .navbar {
+      position: relative;
+    }
+
+    #userButtons, #authButtons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 5px;
+      z-index: 1050;
+    }
+
+    .collapse {
+      position: static;
+      width: 100%;
+      
+    }
+
+    .navbar-collapse {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .navbar-nav {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 10px 15px;
+      text-align: center;
+    }
+  }
 </style>
 
 <body>
@@ -53,15 +100,11 @@
   }
   ?>
 
-
   <nav class="navbar navbar-expand-lg shadow-sm sticky-top" style="background-color: #ffffff;">
-
     <div class="container">
-
       <a class="navbar-brand me-4" href="../index.php">
         <img src="../img/utn_logo.png" alt="Logo de la Universidad Tecnológica Nacional" height="40">
       </a>
-
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -74,8 +117,9 @@
             <a class="nav-link" href="#">PPS</a>
           </li>
         </ul>
-
-        <?php if (isset($_SESSION['user_id'])): ?>
+      </div>
+      <?php if (isset($_SESSION['user_id'])): ?>
+        <div id="userButtons" class="d-flex">
           <div class="dropstart me-2">
             <button type="button" class="btn btn-dark btn-sm rounded-circle" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Notificaciones">
               <i class="fa-solid fa-bell"></i>
@@ -140,15 +184,15 @@
               <li><a class="dropdown-item " href="../auth/logout.php">Cerrar Sesión</a></li>
             </ul>
           </div>
+        </div>
 
-        <?php else: ?>
-          <a class="btn btn-light me-2" href="../auth/login.php">Acceder</a>
-          <a class="btn btn-dark" href="../auth/signup.php">Registrarse</a>
-        <?php endif; ?>
-      </div>
-
+      <?php else: ?>
+        <div id="authButtons" class="d-flex">
+          <a class="btn btn-dark me-2" href="../auth/login.php">Acceder</a>
+        </div>
+        <!--<a class="btn btn-dark" href="../auth/signup.php">Registrarse</a>-->
+      <?php endif; ?>
     </div>
-
   </nav>
 
   <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
