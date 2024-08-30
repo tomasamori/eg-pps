@@ -59,24 +59,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <?php include ('../includes/header.php') ?>
 
+<style>
+    .green-btn {
+        color: white;
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .green-btn:hover {
+        background-color: #49AD6D;
+        border-color: #49AD6D;
+    }
+</style>
+
 <div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-md-3">
             <div class="card card-body shadow-lg">
                 <form id="reset_password_form" action="reset_password.php" method="POST">
                     <div class="text-center">
-                        <img src="../img/utn-logo.png" alt="Logo UTN" class="navbar-brand-img mt-4 mb-4 img-fluid"
-                            style="max-height: 70px;">
+                        <div class="fs-5 fw-bold text-center mt-2 mb-4">
+                            Recuperar Contraseña
+                        </div>
                     </div>
                     <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
-                    <div class="form-group m-2">
-                        <label for="password" class="form-label">Nueva Contraseña:</label>
-                        <input type="password" name="password" id="password" class="form-control" autofocus>
+                    <div class="form-group m-3 mb-0 position-relative">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Nueva Contraseña" required>
+                        <button type="button" id="togglePassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                            <i id="toggleIcon" class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
-                    <div class="form-group m-2">
-                        <label for="password_confirmation" class="form-label">Confirmar Contraseña:</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation"
-                            class="form-control">
+                    <div class="form-group m-3 mb-0 position-relative">
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Confirmar Contraseña" required>
+                        <button type="button" id="toggleConfirmPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                            <i id="toggleConfirmIcon" class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
 
                     <?php if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty ($message)): ?>
@@ -84,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <?php if ($message === 'Contraseña restablecida exitosamente. Redirigiendo...'): ?>
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-md-10">
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <div class="alert alert-success alert-dismissible fade show mb-2" role="alert">
                                         <?= $message ?>
                                     </div>
                                 </div>
@@ -92,7 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <?php else: ?>
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-md-10">
-                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <div class="alert alert-warning alert-dismissible fade show mb-2" role="alert">
                                         <?= $message ?>
                                     </div>
                                 </div>
@@ -109,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <?php endif; ?>
                     <br>
 
-                    <input type="submit" class="btn btn-success btn-block mx-auto d-block mt-4" name="reset_password"
+                    <input type="submit" class="btn btn-success btn-block mx-auto d-block green-btn" name="reset_password"
                         value="Recuperar Contraseña" id="reset_password_btn">
                 </form>
             </div>
@@ -118,3 +135,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 <?php include ('../includes/footer.php') ?>
+
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        } else {
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        }
+    });
+
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPassword = document.getElementById('password_confirmation');
+    const toggleConfirmIcon = document.getElementById('toggleConfirmIcon');
+
+    toggleConfirmPassword.addEventListener('click', function() {
+        const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPassword.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleConfirmIcon.classList.remove("fa-eye-slash");
+            toggleConfirmIcon.classList.add("fa-eye");
+        } else {
+            toggleConfirmIcon.classList.remove("fa-eye");
+            toggleConfirmIcon.classList.add("fa-eye-slash");
+        }
+    });
+</script>

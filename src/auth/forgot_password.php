@@ -1,8 +1,8 @@
-<?php include ("../includes/header.php") ?>
+<?php include("../includes/header.php") ?>
 
 <?php
 $message = '';
-$email = isset ($_POST['email']) ? $_POST['email'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
 
 require '../vendor/autoload.php';
 
@@ -60,30 +60,51 @@ if ($result && $result->num_rows > 0) {
 }
 ?>
 
+<style>
+    .green-btn {
+        color: white;
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .green-btn:hover {
+        background-color: #49AD6D;
+        border-color: #49AD6D;
+    }
+
+    .no-underline {
+        text-decoration: none;
+    }
+</style>
+
 <div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-md-3">
             <div class="card card-body shadow-lg">
                 <form id="reset_password_form" action="forgot_password.php" method="POST">
                     <div class="text-center">
-                        <img src="../img/utn-logo.png" alt="Logo UTN" class="navbar-brand-img mt-4 mb-4 img-fluid"
-                            style="max-height: 70px;">
+                        <div class="fs-5 fw-bold text-center mt-2 mb-4">
+                            Recuperar Contraseña
+                        </div>
                     </div>
 
                     <?php if ($_SERVER["REQUEST_METHOD"] !== "POST"): ?>
                         <div class="form-group m-2">
                             <input type="email" name="email" class="form-control" placeholder="Ingrese su Email" autofocus required>
                         </div>
-                        <input type="submit" class="btn btn-success btn-block mx-auto d-block mt-4" name="reset_password" value="Recuperar Contraseña" id="reset_password_btn">
+                        <div class="d-flex flex-column align-items-center">
+                            <a class="fs-6 no-underline" href="login.php">Volver</a>
+                        </div>
+                        <input type="submit" class="btn btn-success btn-block mx-auto d-block mt-3 green-btn" name="reset_password" value="Recuperar Contraseña" id="reset_password_btn">
                     <?php endif; ?>
 
                     <?php if (!empty($message) && $_SERVER["REQUEST_METHOD"] === "POST"): ?>
-                        <div class="row justify-content-center align-items-center text-center">
+                        <div class="row d-flex flex-column align-items-center text-center">
                             <div class="col-md-10">
-                                <div class="alert alert-success alert-dismissible fade show mt-4 mb-4" role="alert">
+                                <div class="alert alert-success alert-dismissible fade show mb-2 text-center" role="alert">
                                     <?= $message ?>
                                 </div>
-                                <a href="../index.php" class="fs-6">Volver</a>
+                                <a href="../index.php" class="fs-6 no-underline">Volver</a>
                             </div>
                         </div>
                     <?php endif; ?>
@@ -94,10 +115,10 @@ if ($result && $result->num_rows > 0) {
     </div>
 </div>
 
-<?php include ("../includes/footer.php") ?>
+<?php include("../includes/footer.php") ?>
 
 <script>
-    document.getElementById("reset_password_form").addEventListener("submit", function () {
+    document.getElementById("reset_password_form").addEventListener("submit", function() {
         document.getElementById("reset_password_btn").disabled = true;
     });
 </script>
