@@ -36,17 +36,51 @@ if (isset($_SESSION['user_id'])) {
 
 ?>
 
-    <div class="container p-4 bg-light">
+    <style>
+    
+    body {
+        background-color: #f3f5fc;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .table th {
+        color: white;
+        background-color: #3aa661;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f3f9;
+    }
+
+    .green-btn {
+        color: white;
+        background-color: #3aa661;
+        border-color: #3aa661;
+    }
+
+    .green-btn:hover {
+        background-color: #49AD6D;
+        border-color: #49AD6D;
+    }
+    
+    </style>
+
+    <div class="container p-4">
+    <h2 class="text-center mb-4"> Gestión de Documentos </h2>
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-body">
-                    <h2 class="text-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16">
-                            <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z" />
-                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1" />
-                        </svg>
-                        Documentos
-                    </h2>
+
                     <table class="table">
                         <thead>
                             <tr class="text-center">
@@ -68,7 +102,7 @@ if (isset($_SESSION['user_id'])) {
                                     <td class="text-center"><?php echo $row['type'] ?></td>
                                     <td class="text-center"><?php echo $row['status'] ?></td>
                                     <td class="text-center">
-                                        <a href="../document/document_download.php?id=<?php echo $row['document_id']; ?>">
+                                        <a href="../document/document_download.php?id=<?php echo $row['document_id']; ?> " style="text-decoration: none; color: inherit;">
                                             <button title="Descargar documento" class="btn bnt-secondary">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                                                     <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
@@ -157,7 +191,7 @@ if (isset($_SESSION['user_id'])) {
                             <?php } ?>
                         </tbody>
                     </table>
-                </div>
+
                 <br>
                 <!--MODAL DE CARGAR DOCUMENTO-->
                 <?php if ($role_student == $role_user) { ?>

@@ -39,7 +39,8 @@
       position: relative;
     }
 
-    #userButtons, #authButtons {
+    #userButtons,
+    #authButtons {
       position: absolute;
       top: 10px;
       right: 10px;
@@ -53,7 +54,7 @@
     .collapse {
       position: static;
       width: 100%;
-      
+
     }
 
     .navbar-collapse {
@@ -82,6 +83,23 @@
 
   <?php
   require_once __DIR__ . '/../db.php';
+  if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    
+    $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $role_prof = $row['role_id'];
+    }
+    $query = "SELECT role_id FROM user WHERE user_id = '$user_id'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+      $row = $result->fetch_assoc();
+      $role_user = $row['role_id'];
+    }
+  }
+
 
   function getUnreadNotifications($userId)
   {
@@ -113,9 +131,11 @@
           <li class="nav-item me-4">
             <a class="nav-link" href="../professor_list/prof_list.php">Profesores</a>
           </li>
-          <li class="nav-item me-4">
-            <a class="nav-link" href="../spp/spp_main.php">PPS</a>
-          </li>
+          <?php if (isset($_SESSION["user_id"])) { ?>
+            <li class="nav-item me-4">
+              <a class="nav-link" href="../spp/spp_main.php">PPS</a>
+            </li>
+          <?php } ?>
         </ul>
       </div>
       <?php if (isset($_SESSION['user_id'])): ?>
@@ -180,7 +200,15 @@
             </button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="../user/user_edit.php">Editar Perfil</a></li>
-              <li><a class="dropdown-item" href="../crud/crud.php">Portal Administrativo</a></li> <!-- Esto solo lo deberían ver los administradores -->
+              <?php
+              if (isset($role_prof) && isset($role_user) && $role_prof == $role_user) {
+              ?>
+                <li><a class="dropdown-item" href="../crud/crud.php">Portal Administrativo</a></li>
+              <?php
+              }
+
+              ?>
+
               <li><a class="dropdown-item " href="../auth/logout.php">Cerrar Sesión</a></li>
             </ul>
           </div>
@@ -190,7 +218,6 @@
         <div id="authButtons" class="d-flex">
           <a class="btn btn-dark me-2" href="../auth/login.php">Acceder</a>
         </div>
-        <!--<a class="btn btn-dark" href="../auth/signup.php">Registrarse</a>-->
       <?php endif; ?>
     </div>
   </nav>

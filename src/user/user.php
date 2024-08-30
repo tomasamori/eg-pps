@@ -79,7 +79,7 @@
                 <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed" role="alert">
                     <?= $_SESSION['message'] ?>
                 </div>
-            <?php session_unset();
+            <?php unset($_SESSION['message']);;
             } ?>
             <div class="card text-center">
                 <div class="card-header">
