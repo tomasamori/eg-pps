@@ -52,6 +52,22 @@
         background-color: #339a4e;
         border-color: #339a4e;
     }
+
+    .alert {
+        opacity: 1;
+        transition: opacity 0.5s ease-out;
+        text-align: center;
+    }
+
+    .alert-fixed {
+    position: fixed;
+    top: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    z-index: 1050; 
+    width: auto; 
+    max-width: 80%; 
+}
 </style>
 
 
@@ -60,9 +76,8 @@
     <div class="row">
         <div class="col-md-3">
             <?php if (isset($_SESSION['message'])) { ?>
-                <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show" role="alert">
+                <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed" role="alert">
                     <?= $_SESSION['message'] ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             <?php session_unset();
             } ?>
@@ -142,7 +157,7 @@
                                         <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
                                     </svg>
                                 </a>
-                                <a href="user_delete.php?user_id=<?php echo $row['user_id'] ?>" class="btn btn-danger" role="button">
+                                <a href="user_delete.php?user_id=<?php echo $row['user_id'] ?>" class="btn btn-danger" role="button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                         <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
                                     </svg>
@@ -155,5 +170,17 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+            }, 3000);
+        });
+    });
+</script>
 
 <?php include("../includes/footer.php") ?>
