@@ -50,7 +50,6 @@ if (isset($_SESSION['user_id'])) {
                     <table class="table">
                         <thead>
                             <tr class="text-center">
-                                <th>ID</th>
                                 <th>Tipo de Documento</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
@@ -66,7 +65,6 @@ if (isset($_SESSION['user_id'])) {
                             $result_docs = mysqli_query($conn, $query);
                             while ($row = mysqli_fetch_array($result_docs)) { ?>
                                 <tr>
-                                    <td class="text-center"><?php echo $row['document_id'] ?></td>
                                     <td class="text-center"><?php echo $row['type'] ?></td>
                                     <td class="text-center"><?php echo $row['status'] ?></td>
                                     <td class="text-center">

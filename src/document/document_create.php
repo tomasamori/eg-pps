@@ -16,15 +16,30 @@ if (isset($_SESSION['user_id'])) {
     extract($_POST);
     $type = $_POST['type'];
 
+    if ($type === 'Informe semanal') {
+        $query = "SELECT COUNT(*) AS count FROM document WHERE type = 'Informe semanal' AND spp_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $spp_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $file_number = $row['count'] + 1;
+
+        $file_name = "{$spp_id}_{$type}_{$file_number}.pdf";
+    } else {
+        // Forma el nombre del archivo para otros tipos de documentos
+        $file_name = "{$spp_id}_{$type}.pdf";
+    }
+
     // Definir la carpeta de destino
     $destination_folder = "../document/files/";
 
     // Obtener el nombre y la extensión del archivo
-    $file_name = basename($_FILES["file"]["name"]);
-    $extension = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+    $user_file = basename($_FILES["file"]["name"]);
+    $extension = strtolower(pathinfo($user_file, PATHINFO_EXTENSION));
 
     // Validar la extensión del archivo
-    if ($extension == "pdf" || $extension == "doc" || $extension == "docx") {
+    if ($extension == "pdf") {
 
         // Mover el archivo a la carpeta de destino
         if (move_uploaded_file($_FILES["file"]["tmp_name"], $destination_folder . $file_name)) {
