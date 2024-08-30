@@ -23,7 +23,7 @@ if (isset($_POST['update'])) {
     $name = $_POST['name'];
     $career_id = $_POST['career_id'];
     $role_id = $_POST['role_id'];
-
+    
     $query = "UPDATE user SET email = '$email', password = '$password', name = '$name', career_id = '$career_id', role_id='$role_id' WHERE user_id = $user_id";
     mysqli_query($conn, $query);
 
@@ -36,6 +36,17 @@ if (isset($_POST['update'])) {
 <?php include("../includes/header.php") ?>
 
 <style>
+    body {
+        background-image: url('../img/auth-bg.jpg');
+        background-size: cover;
+    }
+
+
+    .form-control:focus {
+        border-color: #3aa661;
+        box-shadow: none;
+    }
+
     .card {
         background-color: #ffffff;
         border-radius: 10px;
@@ -66,65 +77,51 @@ if (isset($_POST['update'])) {
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 mx-auto">
-        <div class="card text-center">
-        <div class="card-header">
+            <div class="card text-center">
+                <div class="card-header">
                     Editar Usuario
                 </div>
-            <div class="card-body">
-                <form action="user_update.php?user_id=<?php echo $_GET['user_id']; ?>" method="POST">
-                    <div class="form-group m-2">
-                        <input type="text" name="email" value="<?php echo $email ?>" class="form-control" placeholder="Actualizar email">
-                    </div>
-                    <div class="form-group m-2">
-                        <input type="password" name="password" value="<?php echo $password ?>" class="form-control" placeholder="Actualizar passworrd" disabled>
-                    </div>
-                    <div class="form-group m-2">
-                        <input type="text" name="name" value="<?php echo $name ?>" class="form-control" placeholder="Actualizar nombre y apellido">
-                    </div>
-                    <?php
-                    $query = "SELECT * FROM career";
-                    $result_career = mysqli_query($conn, $query);
-                    ?>
-                    <div class="form-group m-2">
-                        <select name="career_id" class="form-control">
-                            <?php while ($row = mysqli_fetch_assoc($result_career)) { ?>
-                                <option value="<?php echo $row['career_id']; ?>" <?php if ($row['career_id'] == $career_id) echo 'selected'; ?>><?php echo $row['name']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <?php
-                    $query = "SELECT * FROM role";
-                    $result_role = mysqli_query($conn, $query);
-                    ?>
-                    <div class="form-group m-2">
-                        <select name="role_id" class="form-control">
-                            <?php while ($row = mysqli_fetch_assoc($result_role)) { ?>
-                                <option value="<?php echo $row['role_id']; ?>" <?php if ($row['role_id'] == $role_id) echo 'selected'; ?>><?php echo $row['name']; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <button class="btn btn-success btn-block mx-auto d-block" name="update">
-                        Editar
-                    </button>
-                </form>
-            </div>
+                <div class="card-body">
+                    <form action="user_update.php?user_id=<?php echo $_GET['user_id']; ?>" method="POST">
+                        <div class="form-group m-2">
+                            <input type="text" name="email" value="<?php echo $email ?>" class="form-control" placeholder="Actualizar email" required>
+                        </div>
+                        <div class="form-group m-2">
+                            <input type="password" name="password" value="<?php echo $password ?>" class="form-control" placeholder="Actualizar passworrd" disabled>
+                        </div>
+                        <div class="form-group m-2">
+                            <input type="text" name="name" value="<?php echo $name ?>" class="form-control" placeholder="Actualizar nombre y apellido" required>
+                        </div>
+                        <?php
+                        $query = "SELECT * FROM career";
+                        $result_career = mysqli_query($conn, $query);
+                        ?>
+                        <div class="form-group m-2">
+                            <select name="career_id" class="form-control">
+                                <?php while ($row = mysqli_fetch_assoc($result_career)) { ?>
+                                    <option value="<?php echo $row['career_id']; ?>" <?php if ($row['career_id'] == $career_id) echo 'selected'; ?>><?php echo $row['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <?php
+                        $query = "SELECT * FROM role";
+                        $result_role = mysqli_query($conn, $query);
+                        ?>
+                        <div class="form-group m-2">
+                            <select name="role_id" class="form-control">
+                                <?php while ($row = mysqli_fetch_assoc($result_role)) { ?>
+                                    <option value="<?php echo $row['role_id']; ?>" <?php if ($row['role_id'] == $role_id) echo 'selected'; ?>><?php echo $row['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <button class="btn btn-success btn-block mx-auto d-block" name="update">
+                            Editar
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>    
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 
 <?php include("../includes/footer.php") ?>

@@ -60,14 +60,14 @@
     }
 
     .alert-fixed {
-    position: fixed;
-    top: 0; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    z-index: 1050; 
-    width: auto; 
-    max-width: 80%; 
-}
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1050;
+        width: auto;
+        max-width: 80%;
+    }
 </style>
 
 
@@ -90,8 +90,11 @@
                         <div class="form-group m-2">
                             <input type="email" name="email" class="form-control" placeholder="Email" autofocus required>
                         </div>
-                        <div class="form-group m-2">
-                            <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+                        <div class="form-group m-2 position-relative">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>
+                            <button type="button" id="togglePassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                                <i id="toggleIcon" class="fa-regular fa-eye"></i>
+                            </button>
                         </div>
                         <div class="form-group m-2">
                             <input type="text" name="name" class="form-control" placeholder="Nombre y Apellido" required>
@@ -172,6 +175,23 @@
 </div>
 
 <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    const toggleIcon = document.getElementById('toggleIcon');
+
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        } else {
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function() {
         var alerts = document.querySelectorAll('.alert');
         alerts.forEach(function(alert) {
