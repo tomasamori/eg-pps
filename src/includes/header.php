@@ -114,7 +114,7 @@
             <a class="nav-link" href="../professor_list/prof_list.php">Profesores</a>
           </li>
           <li class="nav-item me-4">
-            <a class="nav-link" href="#">PPS</a>
+            <a class="nav-link" href="../spp/spp_main.php">PPS</a>
           </li>
         </ul>
       </div>
