@@ -34,3 +34,6 @@ vendor
 
 # Ignore profile images
 /src/img/profiles/
+
+# Ignore spp documents
+/src/document/files/
