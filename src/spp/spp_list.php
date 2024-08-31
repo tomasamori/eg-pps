@@ -3,21 +3,58 @@ session_start();
 include("../db.php");
 include("../includes/header.php")
 ?>
-<div class="container p-4 bg-light">
+
+<style>
+    body {
+        background-color: #f3f5fc;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .table th {
+        color: white;
+        background-color: #3aa661;
+    }
+
+    .table th,
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f3f9;
+    }
+
+    .table th,
+    .table td {
+        width: 33.33%;
+    }
+
+    .btn-custom {
+        background-color: #3aa661;
+        color: white;
+        border: none;
+    }
+</style>
+
+<div class="container p-4">
     <div class="row">
         <div class="col-md-12">
+            <h2 class="text-center mb-4">
+                Listado de PPS
+            </h2>
             <div class="card card-body">
-                <h2 class="text-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-clipboard2-pulse-fill" viewBox="0 0 16 16">
-                        <path d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5" />
-                        <path d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M9.98 5.356 11.372 10h.128a.5.5 0 0 1 0 1H11a.5.5 0 0 1-.479-.356l-.94-3.135-1.092 5.096a.5.5 0 0 1-.968.039L6.383 8.85l-.936 1.873A.5.5 0 0 1 5 11h-.5a.5.5 0 0 1 0-1h.191l1.362-2.724a.5.5 0 0 1 .926.08l.94 3.135 1.092-5.096a.5.5 0 0 1 .968-.039Z" />
-                    </svg>
-                    Listado de PPs
-                </h2>
+                <div class="d-flex justify-content-end mb-4">
+                    <a href="../spp/spp_report.php" class="btn btn-custom">Generador de Reportes</a>
+                </div>
                 <table class="table">
                     <thead>
                         <tr class="text-center">
-                            <th>ID</th>
                             <th>Estudiante</th>
                             <th>Organización</th>
                             <th>Estado</th>
@@ -53,7 +90,6 @@ include("../includes/header.php")
                         $result_spp = mysqli_query($conn, $query);
                         while ($row = mysqli_fetch_array($result_spp)) { ?>
                             <tr>
-                                <td class="text-center"><?php echo $row['spp_id'] ?></td>
                                 <td class="text-center"><?php echo $row['student_name'] ?></td>
                                 <td class="text-center"><?php echo $row['organization_name'] ?></td>
                                 <td class="text-center"><?php echo $row['status'] ?></td>
@@ -92,7 +128,7 @@ include("../includes/header.php")
                                                         <?php echo $row['organization_state'] ?><br>
                                                         <strong>Código postal</strong><br>
                                                         <?php echo $row['organization_zip'] ?><br>
-                                                       
+
                                                         <strong>Fecha de inicio</strong><br>
                                                         <?php echo $row['start_date'] ?><br>
                                                         <strong>Estado</strong><br>
