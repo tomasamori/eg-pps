@@ -20,7 +20,21 @@ if (!empty($_POST['email']) && !empty($_POST['password'])) {
 
     if ($results && password_verify($_POST['password'], $results['password'])) {
         $_SESSION['user_id'] = $results['user_id'];
-        $_SESSION['role_id'] = $results['role_id'];
+        $role_id = $results['role_id'];
+        $stmt_role = $conn->prepare('SELECT name FROM role WHERE role_id = ?');
+        $stmt_role->bind_param('i', $role_id);
+        $stmt_role->execute();
+        $result_role = $stmt_role->get_result();
+        $role = $result_role->fetch_assoc();
+
+        if ($role) {
+            $_SESSION['role_name'] = $role['name'];
+        } else {
+            $_SESSION['role_name'] = 'Desconocido';
+        }
+
+        $stmt_role->close();
+
         header("Location: ../index.php");
         exit;
     } else {
