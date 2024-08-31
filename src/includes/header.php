@@ -86,11 +86,11 @@
   if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     
-    $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
+    $query = "SELECT role_id FROM role WHERE name = 'Admin'";
     $result = $conn->query($query);
     if ($result && $result->num_rows > 0) {
       $row = $result->fetch_assoc();
-      $role_prof = $row['role_id'];
+      $role_admin = $row['role_id'];
     }
     $query = "SELECT role_id FROM user WHERE user_id = '$user_id'";
     $result = $conn->query($query);
@@ -201,7 +201,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="../user/user_edit.php">Editar Perfil</a></li>
               <?php
-              if (isset($role_prof) && isset($role_user) && $role_prof == $role_user) {
+              if ($role_admin == $role_user) {
               ?>
                 <li><a class="dropdown-item" href="../crud/crud.php">Portal Administrativo</a></li>
               <?php

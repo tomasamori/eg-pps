@@ -2,7 +2,6 @@
 <?php include("includes/header.php") ?>
 
 <style>
-    
     body {
         background-color: #f3f5fc;
     }
@@ -47,7 +46,6 @@
         background-color: #49AD6D;
         border-color: #49AD6D;
     }
-
 </style>
 
 <div class="container banner rounded-5 mt-4">
@@ -56,7 +54,12 @@
             <div class="col-md-6 banner-text">
                 <h1 class="display-6 fw-bold">Prácticas Profesionales Supervisadas</h1>
                 <p class="lead">Tu espacio para seguir y documentar tus Prácticas Profesionales Supervisadas.</p>
-                <a href="./auth/signup.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
+                <?php if (isset($_SESSION["user_id"])) { ?>
+                    <a href="./spp/spp_main.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
+                <?php } else { ?>
+                    <a href="./auth/signup.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
+                <?php } ?>
+                
             </div>
             <div class="col-md-6 d-flex justify-content-center align-items-center">
                 <img src="./img/student.png" alt="Estudiante sosteniendo una carpeta">
@@ -98,7 +101,11 @@
 
     <div class="text-center mt-3">
         <div class="green-btn">
-            <a href="./auth/signup.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
+            <?php if (isset($_SESSION["user_id"])) { ?>
+                <a href="./spp/spp_main.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
+            <?php } else { ?>
+                <a href="./auth/login.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
+                <?php } ?>
         </div>
     </div>
 </div>
