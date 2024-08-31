@@ -152,8 +152,13 @@ include("../includes/header.php"); ?>
         </div>
 
         <div class="col-md-4 mb-4">
-            <?php if ($spp_id != null) : ?>
+            <?php if ($spp_id != null && $mentor_name != 'Sin Asignar') : ?>
                 <div class="tile clickable" onclick="location.href='../document/document.php';">
+                    <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
+                    <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
+                </div>
+            <?php elseif ($mentor_name == 'Sin Asignar') : ?>
+                <div class="tile" data-bs-toggle="modal" data-bs-target="#professorAlertModal">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
                 </div>
@@ -269,6 +274,23 @@ include("../includes/header.php"); ?>
             </div>
             <div class="modal-body">
                 Todavía no tienes una PPS en curso. Debes completar la solicitud de inicio.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="professorAlertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #3aa661; color: #fff;">
+                <h5 class="modal-title" id="alertModalLabel">Aviso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Todavía no tienes un profesor asignado a tu PPS. Se te enviará una notificación cuando se te asigne uno.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
