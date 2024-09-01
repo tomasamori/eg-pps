@@ -29,8 +29,10 @@ if ($_SESSION['role_name'] == 'Profesor') {
                  student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
+                 supervisor.user_id AS supervisor_id,
                  supervisor.name AS supervisor_name, 
-                 supervisor.email AS supervisor_email, 
+                 supervisor.email AS supervisor_email,
+                 mentor.user_id AS mentor_id, 
                  mentor.name AS mentor_name, 
                  mentor.email AS mentor_email
                 FROM spp
@@ -65,8 +67,10 @@ if ($_SESSION['role_name'] == 'Profesor') {
                  student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
+                 supervisor.user_id AS supervisor_id,
                  supervisor.name AS supervisor_name, 
                  supervisor.email AS supervisor_email,
+                 mentor.user_id AS mentor_id,
                  mentor.user_id AS mentor_id,
                  mentor.name AS mentor_name,
                  mentor.email AS mentor_email
@@ -155,19 +159,31 @@ include("../includes/header.php");
                             <td class="text-center"><?php echo htmlspecialchars($row['organization_name'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td class="text-center"><?php echo htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal<?php echo $row['spp_id']; ?>" title="Detalles">
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#detailModal<?php echo $row['spp_id']; ?>" title="Detalles">
                                     <i class="fas fa-info-circle"></i>
                                 </button>
 
-                                <a href="../document/document.php?spp_id=<?php echo $row['spp_id']; ?>" class="btn btn-outline-secondary btn-sm" role="button" title="Documentos">
+                                <a href="../document/document.php?spp_id=<?php echo $row['spp_id']; ?>" class="btn btn-outline-secondary btn-sm rounded-circle" role="button" title="Documentos">
                                     <i class="fas fa-file-alt"></i>
                                 </a>
 
+                                <?php if (($_SESSION['role_name'] == 'Profesor') && ($row['status'] == 'En Curso')) : ?>
+                                    <a href="spp_change_status.php?spp_id=<?php echo $row['spp_id']; ?>&student_id=<?php echo $row['student_id']; ?>&mentor_id=<?php echo $row['mentor_id']; ?>&supervisor_id=<?php echo $row['supervisor_id']; ?>&status=Pendiente de Aprobación&page_num=<?php echo $page_num; ?>"
+                                        class="btn btn-outline-success btn-sm rounded-circle"
+                                        role="button"
+                                        title="Aprobar"
+                                        onclick="return confirm('¿Estás seguro de que deseas aprobar esta solicitud?');">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </a>
+                                <?php endif; ?>
+
+                                <!-- Acá va el de responsable -->
+
                                 <?php if (($_SESSION['role_name'] == 'Responsable' || $_SESSION['role_name'] == 'Administrador') && (is_null($row['mentor_id']))) : ?>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#assignMentorModal<?php echo $row['spp_id']; ?>" title="Asignar Profesor">
+                                    <button type="button" class="btn btn-outline-success btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#assignMentorModal<?php echo $row['spp_id']; ?>" title="Asignar Profesor">
                                         <i class="fas fa-user-plus"></i>
-                                        </a>
-                                    <?php endif; ?>
+                                    </button>
+                                <?php endif; ?>
 
                             </td>
                         </tr>
@@ -273,6 +289,28 @@ include("../includes/header.php");
                     <?php } ?>
                 </tbody>
             </table>
+
+            <?php if (isset($_SESSION['success_message'])) { ?>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="alert alert-success alert-dismissible fade show mt-4 text-center" role="alert">
+                        <?= $_SESSION['success_message'] ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <?php unset($_SESSION['success_message']);
+                ?>
+            <?php } ?>
+
+            <?php if (isset($_SESSION['error_message'])) { ?>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="alert alert-danger alert-dismissible fade show mt-4 text-center" role="alert">
+                        <?= $_SESSION['error_message'] ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <?php unset($_SESSION['error_message']);
+                ?>
+            <?php } ?>
 
             <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
                 <?php if ($page_num > 1) { ?>
