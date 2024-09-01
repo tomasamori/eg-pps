@@ -37,163 +37,174 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
     <style>
-    
-    body {
-        background-color: #f3f5fc;
-    }
+        body {
+            background-color: #f3f5fc;
+        }
 
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
 
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
+        .table th {
+            color: white;
+            background-color: #3aa661;
+        }
 
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
 
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
+        .table-hover tbody tr:hover {
+            background-color: #f1f3f9;
+        }
 
-    .green-btn {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
+        .green-btn {
+            color: white;
+            background-color: #3aa661;
+            border-color: #3aa661;
+        }
 
-    .green-btn:hover {
-        background-color: #49AD6D;
-        border-color: #49AD6D;
-    }
-    
+        .green-btn:hover {
+            background-color: #49AD6D;
+            border-color: #49AD6D;
+        }
+
+        .alert-fixed-top-center {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+            width: auto;
+            max-width: 90%;
+        }
     </style>
 
     <div class="container p-4">
-    <h2 class="text-center mb-4"> Gestión de Documentos </h2>
+        <h2 class="text-center mb-4"> Gestión de Documentos </h2>
         <div class="row">
             <div class="col-md-12">
+                <?php if (isset($_SESSION['message'])) { ?>
+                    <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed-top-center" role="alert">
+                        <?= $_SESSION['message'] ?>
+                    </div>
+                <?php unset($_SESSION['message']);
+                } ?>
+                <table class="table">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Tipo de Documento</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($_SESSION['role_name'] == 'Alumno') {
+                            $query = "SELECT * from document WHERE spp_id='$spp_id'";
+                        } elseif (isset($_GET['spp_id'])) {
+                            $spp_id = $_GET['spp_id'];
+                            $query = "SELECT * from document WHERE spp_id='$spp_id'";
+                        } else {
+                            $query = "SELECT * from document";
+                        }
+                        $result_docs = mysqli_query($conn, $query);
+                        while ($row = mysqli_fetch_array($result_docs)) { ?>
+                            <tr>
+                                <td class="text-center"><?php echo $row['type'] ?></td>
+                                <td class="text-center"><?php echo $row['status'] ?></td>
+                                <td class="text-center">
+                                    <a href="../document/document_download.php?id=<?php echo $row['document_id']; ?> " style="text-decoration: none; color: inherit;">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" title="Descargar documento">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </a>
 
-                    <table class="table">
-                        <thead>
-                            <tr class="text-center">
-                                <th>Tipo de Documento</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($_SESSION['role_name'] == 'Alumno') {
-                                $query = "SELECT * from document WHERE spp_id='$spp_id'";
-                            } elseif (isset($_GET['spp_id'])) {
-                                $spp_id = $_GET['spp_id'];
-                                $query = "SELECT * from document WHERE spp_id='$spp_id'";
-                            } else {
-                                $query = "SELECT * from document";
-                            }
-                            $result_docs = mysqli_query($conn, $query);
-                            while ($row = mysqli_fetch_array($result_docs)) { ?>
-                                <tr>
-                                    <td class="text-center"><?php echo $row['type'] ?></td>
-                                    <td class="text-center"><?php echo $row['status'] ?></td>
-                                    <td class="text-center">
-                                        <a href="../document/document_download.php?id=<?php echo $row['document_id']; ?> " style="text-decoration: none; color: inherit;">
-                                            <button title="Descargar documento" class="btn bnt-secondary">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-                                                </svg>
+                                    <?php if ($role_student == $role_user) { ?>
+                                        <a><button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#correctionviewModal<?php echo $row['document_id']; ?>" title="Ver correcciones">
+                                                <i class="fas fa-comment"></i>
                                             </button>
                                         </a>
-
-                                        <?php if ($role_student == $role_user) { ?>
-                                            <a><button class="btn bnt-secondary" data-bs-toggle="modal" data-bs-target="#correctionviewModal<?php echo $row['document_id']; ?>" title="Ver correcciones">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0" />
-                                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
-                                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
-                                                    </svg>
-                                                </button>
-                                            </a>
-                                        <?php } elseif ($role_prof == $role_user) { ?>
-                                            <a><button class="btn bnt-secondary" data-bs-toggle="modal" data-bs-target="#correctionModal<?php echo $row['document_id']; ?>" title="Agregar correcciones">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-journal-check" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M10.854 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 8.793l2.646-2.647a.5.5 0 0 1 .708 0" />
-                                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
-                                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
-                                                    </svg>
-                                                </button>
-                                            </a>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                                <!--MODAL DE VISUALIZACION DE CORRECCIONES-->
-                                <div class="modal fade" id="correctionviewModal<?php echo $row['document_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                    <?php echo $row['type'] ?>
-                                                </h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <?php if (!empty($row['correction'])) { ?>
-                                                    <strong>Correcciones: </strong>
-                                                    <?php echo $row['correction'] ?>
-                                                <?php } else { ?>
-                                                    <p>Aún no hay correcciones</p>
-                                                <?php } ?>
-                                            </div>
+                                    <?php } elseif ($role_prof == $role_user) { ?>
+                                        <a><button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#correctionModal<?php echo $row['document_id']; ?>" title="Agregar correcciones">
+                                                <i class="fas fa-comment"></i>
+                                            </button>
+                                        </a>
+                                    <?php } ?>
+                                    <?php if ($role_prof == $role_user) { ?>
+                                        <form action="document_aprobation.php" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas aprobar este documento?');">
+                                            <input type="hidden" name="document_id" value="<?php echo $row['document_id']; ?>">
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm rounded-circle" title="Aprobar documento"
+                                                <?php echo ($row['status'] === 'Aprobado') ? 'disabled' : ''; ?>>
+                                                <i class="fa-solid fa-circle-check"></i>
+                                            </button>
+                                        </form>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <!--MODAL DE VISUALIZACION DE CORRECCIONES-->
+                            <div class="modal fade" id="correctionviewModal<?php echo $row['document_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                <?php echo $row['type'] ?>
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <?php if (!empty($row['correction'])) { ?>
+                                                <strong>Correcciones: </strong>
+                                                <?php echo $row['correction'] ?>
+                                            <?php } else { ?>
+                                                <p>Aún no hay correcciones</p>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!--MODAL DE CORRECCIONES-->
-                                <div class="modal fade" id="correctionModal<?php echo $row['document_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                    <?php echo $row['type'] ?>
-                                                </h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="document_correction.php" method="POST" enctype="multipart/form-data">
-                                                    <div class="modal-body">
-                                                        <input type="hidden" name="document_id" value="<?php echo $row['document_id']; ?>">
-                                                        <?php if (!empty($row['correction'])) { ?>
-                                                            <p>Este documento ya tiene correcciones.</p>
-                                                        <?php } else { ?>
-                                                            <div class="form-group m-2">
-                                                                <input type="text" name="correction" class="form-control" placeholder="Correcciones" autofocus required>
-                                                            </div>
-                                                        <?php } ?>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                                                        <?php if (empty($row['correction'])) { ?>
-                                                            <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
-                                                        <?php } ?>
-                                                    </div>
-                                                </form>
-                                            </div>
+                            <!--MODAL DE CORRECCIONES-->
+                            <div class="modal fade" id="correctionModal<?php echo $row['document_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                <?php echo $row['type'] ?>
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="document_correction.php" method="POST" enctype="multipart/form-data">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="document_id" value="<?php echo $row['document_id']; ?>">
+                                                    <?php if (!empty($row['correction'])) { ?>
+                                                        <p>Este documento ya tiene correcciones.</p>
+                                                    <?php } else { ?>
+                                                        <div class="form-group m-2">
+                                                            <input type="text" name="correction" class="form-control" placeholder="Correcciones" autofocus required>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                                                    <?php if (empty($row['correction'])) { ?>
+                                                        <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
+                                                    <?php } ?>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                            <?php } ?>
-                        </tbody>
-                    </table>
+                        <?php } ?>
+                    </tbody>
+                </table>
 
                 <br>
                 <!--MODAL DE CARGAR DOCUMENTO-->
@@ -249,5 +260,22 @@ if (isset($_SESSION['user_id'])) {
         <img src="../img/notFound.png" alt="Imagen" class="img-fluid">
     </div>
 <?php
-}
-include("../includes/footer.php") ?>
+} ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            setTimeout(function() {
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                }, 500);
+            }, 3000);
+        });
+    });
+</script>
+
+<?php include("../includes/footer.php") ?>

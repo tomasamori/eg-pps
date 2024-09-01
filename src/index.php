@@ -57,7 +57,7 @@
                 <?php if (isset($_SESSION["user_id"])) { ?>
                     <a href="./spp/spp_main.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
                 <?php } else { ?>
-                    <a href="./auth/signup.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
+                    <a href="./auth/login.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
                 <?php } ?>
                 
             </div>
