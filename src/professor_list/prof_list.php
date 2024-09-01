@@ -47,7 +47,7 @@ $total_pages = ceil($total_professors / $prof_per_page);
 
 // Get professors
 $query = "SELECT user.user_id, user.name, user.email, user.photo, career.name AS career_name, 
-                 COALESCE(SUM(spp.status = 'En proceso'), 0) AS spp_count
+                 COALESCE(SUM(spp.status = 'En Curso'), 0) AS spp_count
           FROM user 
           INNER JOIN career ON user.career_id = career.career_id 
           LEFT JOIN spp_user ON spp_user.mentor_id = user.user_id
