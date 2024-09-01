@@ -26,6 +26,7 @@ if ($_SESSION['role_name'] == 'Profesor') {
     $total_pages = ceil($total_spps / $spp_per_page);
 
     $query = "SELECT spp.spp_id, spp.organization_name, spp.status, 
+                 student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
                  supervisor.name AS supervisor_name, 
@@ -274,11 +275,33 @@ include("../includes/header.php");
             </table>
 
             <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
-                <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-                    <li class="page-item <?php if ($i == $page_num) echo 'active'; ?>">
-                        <a class="page-link" href="?page_num=<?php echo $i; ?>"><?php echo $i; ?></a>
+                <?php if ($page_num > 1) { ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page_num=1" aria-label="Primera página">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
                     </li>
-                <?php endfor; ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page_num=<?php echo $page_num - 1; ?>" aria-label="Anterior">
+                            <span aria-hidden="true"><?php echo $page_num - 1; ?></span>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <li class="page-item active"><a class="page-link"><?php echo $page_num; ?></a></li>
+
+                <?php if ($page_num < $total_pages) { ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page_num=<?php echo $page_num + 1; ?>" aria-label="Siguiente">
+                            <span aria-hidden="true"><?php echo $page_num + 1; ?></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page_num=<?php echo $total_pages; ?>" aria-label="Última página">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </div>
