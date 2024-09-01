@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['spp_assign_mentor'])) 
     if (!empty($spp_id) && !empty($mentor_id) && !empty($student_id)) {
         assignMentor($conn, $spp_id, $mentor_id, $student_id, $supervisor_id);
 
-        header("Location: ../spp/spp_list.php");
+        header("Location: ../spp/spp_list.php?page_num=$_POST[page_num]");
         exit();
     } else {
         echo "Error: faltan datos para asignar el profesor.";

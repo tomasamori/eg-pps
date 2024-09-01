@@ -187,7 +187,6 @@ include("../includes/header.php");
                                                     <h5 class="mb-3">Datos de la organización</h5>
                                                     <strong>Organización</strong><br>
                                                     <?php echo htmlspecialchars($row['organization_name'], ENT_QUOTES, 'UTF-8'); ?><br>
-                                                    <!-- Otros detalles de la organización aquí -->
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -195,7 +194,6 @@ include("../includes/header.php");
                                                     <h5 class="mb-3">Datos del alumno</h5>
                                                     <strong>Nombre</strong><br>
                                                     <?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?><br>
-                                                    <!-- Otros detalles del alumno aquí -->
                                                 </div>
                                             </div>
                                         </div>
@@ -213,23 +211,20 @@ include("../includes/header.php");
                                         </h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <!-- Mover el formulario aquí para envolver el dropdown y el botón de envío -->
                                     <form action="spp_assign_mentor.php" method="POST">
                                         <div class="modal-body text-center">
-                                            <!-- Campo oculto para enviar el ID de la PPS -->
                                             <input type="hidden" name="spp_id" value="<?php echo $row['spp_id']; ?>">
                                             <input type="hidden" name="supervisor_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                            <input type="hidden" name="page_num" value="<?php echo $page_num; ?>">
                                             <div class="form-group m-2">
                                                 <select name="mentor_id" class="form-control" required>
                                                     <option value="">Seleccione un profesor</option>
                                                     <?php
-                                                    // Obtener role_id del profesor
                                                     $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
                                                     $result_role = mysqli_query($conn, $query);
                                                     $role_prof = mysqli_fetch_assoc($result_role);
 
-                                                    // Obtener career_id del estudiante
-                                                    $student_id = $row['student_id']; // O como estés obteniendo el student_id
+                                                    $student_id = $row['student_id'];
                                                     $query = "SELECT career_id FROM user WHERE user_id = ?";
                                                     $stmt = $conn->prepare($query);
                                                     $stmt->bind_param("i", $student_id);
@@ -237,7 +232,6 @@ include("../includes/header.php");
                                                     $result_career = $stmt->get_result();
                                                     $student_career = $result_career->fetch_assoc()['career_id'];
 
-                                                    // Obtener profesores de la misma carrera y con menos de 10 PPS en curso
                                                     $query = "
                                                             SELECT u.user_id, u.name 
                                                             FROM user u 
@@ -266,7 +260,6 @@ include("../includes/header.php");
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                            <!-- Botón "Guardar" ahora es un botón de tipo submit que envía el formulario -->
                                             <button type="submit" class="btn btn-success" name="spp_assign_mentor">Guardar</button>
                                         </div>
                                     </form>
