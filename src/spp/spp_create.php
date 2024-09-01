@@ -24,6 +24,29 @@ if (isset($_POST['organization_name']) && isset($_POST['organization_email']) &&
             die('Hubo un problema al crear tu PPS');
         } else {
             $_SESSION['message'] = 'Solicitud de PPS registrada exitosamente con número de identificación ' . $spp_id . '';
+
+            $query = "SELECT role_id FROM role WHERE name = 'Responsable'";
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $supervisor_role = $stmt->get_result();
+            $supervisor_role_id = $supervisor_role->fetch_assoc()['role_id'];
+            
+            $query = "SELECT user_id FROM user WHERE role_id = " . $supervisor_role_id;
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $supervisor_list = $stmt->get_result();
+            
+            for ($i = 0; $i < $supervisor_list->num_rows; $i++) {
+                $supervisor = $supervisor_list->fetch_assoc();
+                $supervisor_id = $supervisor['user_id'];
+                $query = "INSERT INTO notification (sender_id, receiver_id, message) VALUES (?, ?, ?)";
+                $stmt = $conn->prepare($query);
+                $message = "Se ha registrado una nueva solicitud de PPS con número de identificación $spp_id";
+                $sender_id = 1;
+                $stmt->bind_param("iis", $sender_id, $supervisor_id, $message);
+                $stmt->execute();
+            }
+
             header("Location: spp.php");
         }
     } else {
