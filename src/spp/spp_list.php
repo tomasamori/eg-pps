@@ -43,7 +43,6 @@ if ($_SESSION['role_name'] == 'Profesor') {
     $stmt->bind_param("iii", $_SESSION['user_id'], $start, $spp_per_page);
     $stmt->execute();
     $result_spp = $stmt->get_result();
-
 } elseif ($_SESSION['role_name'] == 'Responsable' || $_SESSION['role_name'] == 'Administrador') {
     function getTotalSPPs($conn)
     {
@@ -62,11 +61,13 @@ if ($_SESSION['role_name'] == 'Profesor') {
     $total_pages = ceil($total_spps / $spp_per_page);
 
     $query = "SELECT spp.spp_id, spp.organization_name, spp.status, 
+                 student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
                  supervisor.name AS supervisor_name, 
-                 supervisor.email AS supervisor_email, 
-                 mentor.name AS mentor_name, 
+                 supervisor.email AS supervisor_email,
+                 mentor.user_id AS mentor_id,
+                 mentor.name AS mentor_name,
                  mentor.email AS mentor_email
                 FROM spp
                 INNER JOIN spp_user ON spp.spp_id = spp_user.spp_id
@@ -153,19 +154,29 @@ include("../includes/header.php");
                             <td class="text-center"><?php echo htmlspecialchars($row['organization_name'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td class="text-center"><?php echo htmlspecialchars($row['status'], ENT_QUOTES, 'UTF-8'); ?></td>
                             <td class="text-end">
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal<?php echo $row['spp_id']; ?>">
-                                    Detalles
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal<?php echo $row['spp_id']; ?>" title="Detalles">
+                                    <i class="fas fa-info-circle"></i>
                                 </button>
+
+                                <a href="../document/document.php?spp_id=<?php echo $row['spp_id']; ?>" class="btn btn-outline-secondary btn-sm" role="button" title="Documentos">
+                                    <i class="fas fa-file-alt"></i>
+                                </a>
+
+                                <?php if (($_SESSION['role_name'] == 'Responsable' || $_SESSION['role_name'] == 'Administrador') && (is_null($row['mentor_id']))) : ?>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#assignMentorModal<?php echo $row['spp_id']; ?>" title="Asignar Profesor">
+                                        <i class="fas fa-user-plus"></i>
+                                        </a>
+                                    <?php endif; ?>
+
                             </td>
                         </tr>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="exampleModal<?php echo $row['spp_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="detailModal<?php echo $row['spp_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                            <strong>PPs del alumno </strong><?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?>
+                                            <strong>PPS del alumno <?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                         </h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
@@ -192,11 +203,83 @@ include("../includes/header.php");
                                 </div>
                             </div>
                         </div>
+
+                        <div class="modal fade" id="assignMentorModal<?php echo $row['spp_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                            <strong>Asignar Profesor</strong>
+                                        </h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <!-- Mover el formulario aquí para envolver el dropdown y el botón de envío -->
+                                    <form action="spp_assign_mentor.php" method="POST">
+                                        <div class="modal-body text-center">
+                                            <!-- Campo oculto para enviar el ID de la PPS -->
+                                            <input type="hidden" name="spp_id" value="<?php echo $row['spp_id']; ?>">
+                                            <input type="hidden" name="supervisor_id" value="<?php echo $_SESSION['user_id']; ?>">
+                                            <div class="form-group m-2">
+                                                <select name="mentor_id" class="form-control" required>
+                                                    <option value="">Seleccione un profesor</option>
+                                                    <?php
+                                                    // Obtener role_id del profesor
+                                                    $query = "SELECT role_id FROM role WHERE name = 'Profesor'";
+                                                    $result_role = mysqli_query($conn, $query);
+                                                    $role_prof = mysqli_fetch_assoc($result_role);
+
+                                                    // Obtener career_id del estudiante
+                                                    $student_id = $row['student_id']; // O como estés obteniendo el student_id
+                                                    $query = "SELECT career_id FROM user WHERE user_id = ?";
+                                                    $stmt = $conn->prepare($query);
+                                                    $stmt->bind_param("i", $student_id);
+                                                    $stmt->execute();
+                                                    $result_career = $stmt->get_result();
+                                                    $student_career = $result_career->fetch_assoc()['career_id'];
+
+                                                    // Obtener profesores de la misma carrera y con menos de 10 PPS en curso
+                                                    $query = "
+                                                            SELECT u.user_id, u.name 
+                                                            FROM user u 
+                                                            LEFT JOIN (
+                                                                SELECT mentor_id, COUNT(*) AS pps_count 
+                                                                FROM spp_user
+                                                                INNER JOIN spp ON spp_user.spp_id = spp.spp_id 
+                                                                WHERE spp.status = 'En Curso' 
+                                                                GROUP BY mentor_id
+                                                            ) pps ON u.user_id = pps.mentor_id 
+                                                            WHERE u.role_id = ? 
+                                                            AND u.career_id = ? 
+                                                            AND (pps.pps_count < 10 OR pps.pps_count IS NULL)";
+
+                                                    $stmt = $conn->prepare($query);
+                                                    $stmt->bind_param("ii", $role_prof['role_id'], $student_career);
+                                                    $stmt->execute();
+                                                    $result_mentor = $stmt->get_result();
+
+                                                    while ($row_mentor = mysqli_fetch_assoc($result_mentor)) {
+                                                    ?>
+                                                        <option value="<?php echo $row_mentor['user_id']; ?>"><?php echo $row_mentor['name']; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <!-- Botón "Guardar" ahora es un botón de tipo submit que envía el formulario -->
+                                            <button type="submit" class="btn btn-success" name="spp_assign_mentor">Guardar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+
                     <?php } ?>
                 </tbody>
             </table>
 
-            <!-- Paginación -->
             <ul class="pagination justify-content-center pb-5 pt-5 mb-0">
                 <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
                     <li class="page-item <?php if ($i == $page_num) echo 'active'; ?>">
