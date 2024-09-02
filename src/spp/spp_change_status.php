@@ -18,9 +18,16 @@ if (isset($_GET['spp_id'], $_GET['status']) && !empty($_GET['spp_id']) && !empty
         $supervisor_id = mysqli_real_escape_string($conn, $_GET['supervisor_id']);
 
         if ($new_status === 'Pendiente de Aprobación' || $new_status === 'Aprobada') {
-            $sql = "UPDATE spp SET status = ? WHERE spp_id = ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bind_param("si", $new_status, $spp_id);
+            if ($new_status === 'Pendiente de Aprobación') {
+                $sql = "UPDATE spp SET status = ? WHERE spp_id = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("si", $new_status, $spp_id);
+            } else {
+                $sql = "UPDATE spp SET status = ?, end_date = ? WHERE spp_id = ?";
+                $end_date = date('Y-m-d');
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssi", $new_status, $end_date, $spp_id);
+            }
 
             if ($stmt->execute()) {
                 $_SESSION['success_message'] = "El estado de la PPS ha sido actualizado exitosamente";
@@ -42,7 +49,7 @@ if (isset($_GET['spp_id'], $_GET['status']) && !empty($_GET['spp_id']) && !empty
             } else {
                 $_SESSION['error_message'] = "Error al actualizar el estado de la PPS: " . mysqli_error($conn);
             }
-            
+
             header("Location: spp_list.php?page_num=$page_num");
             exit();
         } else {
