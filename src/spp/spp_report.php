@@ -33,6 +33,19 @@ include("../includes/header.php");
     .table th,.table td {
         width: 33.33%;
     }
+
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+
+    .form-check-label {
+        color: #28a745;
+    }
 </style>
 
 <div class="container p-4">
@@ -44,7 +57,7 @@ include("../includes/header.php");
             <div class="card card-body">
                 <div class="row mb-3">
                     <!-- Columna para el selector de año -->
-                    <div class="col-md-10">
+                    <div class="col-md-8">
                         <form action="" method="GET">
                             <div class="form-group">
                                 <select name="year" id="year" class="form-control" onchange="this.form.submit()">
@@ -58,12 +71,23 @@ include("../includes/header.php");
                                     ?>
                                 </select>
                             </div>
-                        </form>
                     </div>
+
+                    <!-- Columna para el checkbox de estado -->
+                    <div class="col-md-2 d-flex justify-content-start align-items-center">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="status_filter" name="status_filter" value="1" onchange="this.form.submit()" <?php echo isset($_GET['status_filter']) ? 'checked' : ''; ?>>
+                            <label class="form-check-label" for="status_filter">
+                                En curso
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- Columna para el botón de imprimir -->
                     <div class="col-md-2 d-flex justify-content-end align-items-center">
-                        <a href="generate_pdf.php?year=<?php echo isset($_GET['year']) ? $_GET['year'] : ''; ?>" class="btn btn-success">Imprimir</a>
+                        <a href="generate_pdf.php?year=<?php echo isset($_GET['year']) ? $_GET['year'] : ''; ?>&status_filter=<?php echo isset($_GET['status_filter']) ? '1' : '0'; ?>" class="btn btn-success">Imprimir</a>
                     </div>
+                        </form>
                 </div>
 
                 <table class="table">
@@ -77,6 +101,8 @@ include("../includes/header.php");
                     <tbody>
                         <?php
                         $year = isset($_GET['year']) ? $_GET['year'] : '';
+                        $status_filter = isset($_GET['status_filter']) ? $_GET['status_filter'] : '';
+                        
                         $query = "SELECT spp.spp_id, 
                                     spp.organization_name, 
                                     spp.organization_email, 
@@ -103,6 +129,10 @@ include("../includes/header.php");
 
                         if (!empty($year)) {
                             $query .= " AND YEAR(spp.start_date) = $year";
+                        }
+
+                        if ($status_filter == '1') {
+                            $query .= " AND (spp.status = 'En Curso' OR spp.status = 'Pendiente de aprobación')";
                         }
 
                         $result_spp = mysqli_query($conn, $query);
