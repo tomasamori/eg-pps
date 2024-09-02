@@ -25,15 +25,16 @@ if ($_SESSION['role_name'] == 'Profesor') {
     $total_spps = getTotalSPPs($conn);
     $total_pages = ceil($total_spps / $spp_per_page);
 
-    $query = "SELECT spp.spp_id, spp.organization_name, spp.status, 
+    $query = "SELECT spp.spp_id, spp.organization_name, spp.status, spp.organization_email, spp.organization_phone, spp.organization_address, spp.organization_city, spp.organization_state, spp.organization_contact, spp.start_date, COALESCE(spp.end_date, 'En Curso') AS end_date,
                  student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
                  supervisor.user_id AS supervisor_id,
                  supervisor.name AS supervisor_name, 
                  supervisor.email AS supervisor_email,
-                 mentor.user_id AS mentor_id, 
-                 mentor.name AS mentor_name, 
+                 mentor.user_id AS mentor_id,
+                 mentor.user_id AS mentor_id,
+                 mentor.name AS mentor_name,
                  mentor.email AS mentor_email
                 FROM spp
                 INNER JOIN spp_user ON spp.spp_id = spp_user.spp_id
@@ -63,7 +64,7 @@ if ($_SESSION['role_name'] == 'Profesor') {
     $total_spps = getTotalSPPs($conn);
     $total_pages = ceil($total_spps / $spp_per_page);
 
-    $query = "SELECT spp.spp_id, spp.organization_name, spp.status, 
+    $query = "SELECT spp.spp_id, spp.organization_name, spp.status, spp.organization_email, spp.organization_phone, spp.organization_address, spp.organization_city, spp.organization_state, spp.organization_contact, spp.start_date, COALESCE(spp.end_date, 'En Curso') AS end_date,
                  student.user_id AS student_id,
                  student.name AS student_name, 
                  student.email AS student_email, 
@@ -201,29 +202,57 @@ include("../includes/header.php");
                         <div class="modal fade" id="detailModal<?php echo $row['spp_id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered">
                                 <div class="modal-content">
-                                    <div class="modal-header">
+                                    <div class="modal-header bg-success text-white">
                                         <h1 class="modal-title fs-5" id="exampleModalLabel">
                                             <strong>PPS del alumno <?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?></strong>
                                         </h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="row">
+                                        <div class="row mb-4">
                                             <div class="col-md-6">
-                                                <div class="border p-3 mb-3">
-                                                    <h5 class="mb-3">Datos de la organización</h5>
-                                                    <strong>Organización</strong><br>
-                                                    <?php echo htmlspecialchars($row['organization_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                <div class="border rounded p-3 mb-3 shadow-sm bg-light">
+                                                    <h5 class="mb-3 text-success">Datos de la Organización</h5>
+                                                    <strong>Organización:</strong> <?php echo htmlspecialchars($row['organization_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Email:</strong> <?php echo htmlspecialchars($row['organization_email'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Teléfono:</strong> <?php echo htmlspecialchars($row['organization_phone'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Dirección:</strong> <?php echo htmlspecialchars($row['organization_address'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Ciudad:</strong> <?php echo htmlspecialchars($row['organization_city'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Estado:</strong> <?php echo htmlspecialchars($row['organization_state'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Contacto:</strong> <?php echo htmlspecialchars($row['organization_contact'], ENT_QUOTES, 'UTF-8'); ?><br>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6">
-                                                <div class="border p-3 mb-3">
-                                                    <h5 class="mb-3">Datos del alumno</h5>
-                                                    <strong>Nombre</strong><br>
-                                                    <?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                <div class="border rounded p-3 mb-3 shadow-sm bg-light">
+                                                    <h5 class="mb-3 text-success">Datos del Alumno</h5>
+                                                    <strong>Nombre:</strong> <?php echo htmlspecialchars($row['student_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Email:</strong> <?php echo htmlspecialchars($row['student_email'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Fecha de Inicio:</strong> <?php echo htmlspecialchars($row['start_date'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Fecha de Finalización:</strong> <?php echo htmlspecialchars($row['end_date'], ENT_QUOTES, 'UTF-8'); ?><br>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="border rounded p-3 mb-3 shadow-sm bg-light">
+                                                    <h5 class="mb-3 text-success">Datos del Responsable</h5>
+                                                    <strong>Nombre:</strong> <?php echo htmlspecialchars($row['supervisor_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Email:</strong> <?php echo htmlspecialchars($row['supervisor_email'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="border rounded p-3 mb-3 shadow-sm bg-light">
+                                                    <h5 class="mb-3 text-success">Datos del Tutor</h5>
+                                                    <strong>Nombre:</strong> <?php echo htmlspecialchars($row['mentor_name'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                    <strong>Email:</strong> <?php echo htmlspecialchars($row['mentor_email'], ENT_QUOTES, 'UTF-8'); ?><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                     </div>
                                 </div>
                             </div>
