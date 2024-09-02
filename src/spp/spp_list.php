@@ -141,6 +141,11 @@ include("../includes/header.php");
 <div class="container mt-5">
     <h1 class="text-center mb-5">Prácticas Profesionales Supervisadas</h1>
     <div class="row">
+        <div class="text-end mb-3">
+            <a href="../spp/spp_report.php" class="btn btn-success">
+                Imprimir
+            </a>
+        </div>
         <div class="col-md-12">
             <table class="table table-striped table-hover">
                 <thead>
