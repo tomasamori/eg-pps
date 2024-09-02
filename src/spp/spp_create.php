@@ -1,5 +1,37 @@
 <?php session_start();
 include("../db.php");
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    $query = "SELECT role_id FROM role WHERE name = 'Alumno'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $role_student = $row['role_id'];
+    }
+
+    $query = "SELECT role_id FROM user WHERE user_id = '$user_id'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $role_user = $row['role_id'];
+    }
+
+    if ($role_user !== $role_student) {
+        header("Location: ../index.php");
+        exit();
+    }
+} else {
+    header("Location: ../auth/login.php");
+    exit();
+}
+
 if (isset($_POST['organization_name']) && isset($_POST['organization_email']) && isset($_POST['organization_phone']) && isset($_POST['organization_address']) && isset($_POST['organization_city']) && isset($_POST['organization_state']) && isset($_POST['organization_zip']) && isset($_POST['organization_contact'])) {
     $organization_name = $_POST['organization_name'];
     $organization_email = $_POST['organization_email'];

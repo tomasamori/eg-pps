@@ -1,6 +1,33 @@
 <?php session_start(); ?>
 <?php
 include("../db.php");
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    $query = "SELECT role_id FROM role WHERE name = 'Administrador'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $role_admin = $row['role_id'];
+    }
+
+    $query = "SELECT role_id FROM user WHERE user_id = '$user_id'";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $role_user = $row['role_id'];
+    }
+
+    if ($role_user !== $role_admin) {
+        header("Location: ../index.php");
+        exit();
+    }
+} else {
+    header("Location: ../auth/login.php");
+    exit();
+} 
+
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
     $query = "SELECT user.user_id, user.email, user.password, user.name, user.career_id, user.role_id, career.name AS career_name, role.name AS role_name FROM user INNER JOIN career ON user.career_id = career.career_id INNER JOIN role ON user.role_id  = role.role_id WHERE user.user_id = $user_id";
@@ -19,7 +46,6 @@ if (isset($_GET['user_id'])) {
 if (isset($_POST['update'])) {
     $user_id = $_GET['user_id'];
     $email = $_POST['email'];
-    //$password = $_POST['password']; In the future it can be edited by an Admin
     $name = $_POST['name'];
     $career_id = $_POST['career_id'];
     $role_id = $_POST['role_id'];

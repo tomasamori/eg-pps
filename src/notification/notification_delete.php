@@ -3,7 +3,7 @@
 session_start();
 
 if (!isset($_SESSION["user_id"])) {
-    echo "error: Usuario no autenticado";
+    header("Location: ../auth/login.php");
     exit();
 }
 
