@@ -31,7 +31,7 @@ if (isset($_POST['organization_name']) && isset($_POST['organization_email']) &&
             $supervisor_role = $stmt->get_result();
             $supervisor_role_id = $supervisor_role->fetch_assoc()['role_id'];
             
-            $query = "SELECT user_id FROM user WHERE role_id = " . $supervisor_role_id;
+            $query = "SELECT user.user_id FROM user WHERE user.role_id = " . $supervisor_role_id . " AND user.career_id = (SELECT u.career_id FROM user u WHERE u.user_id = " . $user_id .")";
             $stmt = $conn->prepare($query);
             $stmt->execute();
             $supervisor_list = $stmt->get_result();
