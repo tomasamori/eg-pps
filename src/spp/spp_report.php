@@ -52,7 +52,7 @@ include("../includes/header.php");
     <div class="row">
         <div class="col-md-12">
             <h2 class="text-center mb-4">
-                PPs asignadas
+                PPS asignadas
             </h2>
             <div class="card card-body">
                 <div class="row mb-3">
