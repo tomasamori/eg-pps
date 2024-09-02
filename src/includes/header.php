@@ -86,7 +86,7 @@
   if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     
-    $query = "SELECT role_id FROM role WHERE name = 'Admin'";
+    $query = "SELECT role_id FROM role WHERE name = 'Administrador'";
     $result = $conn->query($query);
     if ($result && $result->num_rows > 0) {
       $row = $result->fetch_assoc();
@@ -130,6 +130,9 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-bold">
           <li class="nav-item me-4">
             <a class="nav-link" href="../professor_list/prof_list.php">Profesores</a>
+          </li>
+          <li class="nav-item me-4">
+            <a class="nav-link" href="../supervisor_list/sup_list.php">Responsables</a>
           </li>
           <?php if (isset($_SESSION["user_id"])) { ?>
             <li class="nav-item me-4">
