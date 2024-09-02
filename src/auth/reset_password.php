@@ -3,7 +3,11 @@
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === "GET") {
-    $token = $_GET['token'];
+    if (isset($_GET['token'])) {
+        $token = $_GET['token'];
+    } else {
+        header("Location: ../index.php");
+    }
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $token = $_POST['token'];
 } else {
