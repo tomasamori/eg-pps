@@ -171,13 +171,23 @@ include("../includes/header.php");
                                     <a href="spp_change_status.php?spp_id=<?php echo $row['spp_id']; ?>&student_id=<?php echo $row['student_id']; ?>&mentor_id=<?php echo $row['mentor_id']; ?>&supervisor_id=<?php echo $row['supervisor_id']; ?>&status=Pendiente de Aprobación&page_num=<?php echo $page_num; ?>"
                                         class="btn btn-outline-success btn-sm rounded-circle"
                                         role="button"
-                                        title="Aprobar"
-                                        onclick="return confirm('¿Estás seguro de que deseas aprobar esta solicitud?');">
+                                        id="profApproveButton"
+                                        title="Marcar como Pendiente de Aprobación"
+                                        onclick="return confirm('¿Estás seguro de que deseas marcar como Pendiente de Aprobación esta PPS?');">
                                         <i class="fa-solid fa-circle-check"></i>
                                     </a>
                                 <?php endif; ?>
 
-                                <!-- Acá va el de responsable -->
+                                <?php if (($_SESSION['role_name'] == 'Responsable') && ($row['status'] == 'Pendiente de Aprobación') && ($_SESSION['user_id'] == $row['supervisor_id'])) : ?>
+                                    <a href="spp_change_status.php?spp_id=<?php echo $row['spp_id']; ?>&student_id=<?php echo $row['student_id']; ?>&mentor_id=<?php echo $row['mentor_id']; ?>&supervisor_id=<?php echo $row['supervisor_id']; ?>&page_num=<?php echo $page_num; ?>&status=Aprobada"
+                                        class="btn btn-outline-success btn-sm rounded-circle"
+                                        id="approveButton"
+                                        role="button"
+                                        title="Aprobar"
+                                        onclick="return confirm('¿Estás seguro de que deseas aprobar esta PPS?');">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </a>
+                                <?php endif; ?>
 
                                 <?php if (($_SESSION['role_name'] == 'Responsable' || $_SESSION['role_name'] == 'Administrador') && (is_null($row['mentor_id']))) : ?>
                                     <button type="button" class="btn btn-outline-success btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#assignMentorModal<?php echo $row['spp_id']; ?>" title="Asignar Profesor">
