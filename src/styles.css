@@ -418,3 +418,18 @@ a.user-edit:hover {
 .modal-body-user-edit {
     padding: 20px;
 }
+
+@media (max-width: 500px) {
+    .dropdown-notification-menu {
+      width: 90%; /* Ajusta el ancho del dropdown en pantallas pequeñas */
+    }
+  
+    .dropdown-notification-item .d-inline-block {
+      max-width: 100%;
+      white-space: normal; /* Permite que el texto se divida en varias líneas */
+    }
+  
+    .delete-notification {
+      padding: 0.25rem 0.5rem; /* Reduce el tamaño del botón de eliminar */
+    }
+  }

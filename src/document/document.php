@@ -40,10 +40,29 @@ if (isset($_SESSION['user_id'])) {
         $role_user = $row['role_id'];
     }
 
+    if (isset($_GET['spp_id'])) {
+        $spp_id = $_GET['spp_id'];
+        $query = "SELECT spp_user.student_id, user.name as student_name from spp_user INNER JOIN user on spp_user.student_id = user.user_id WHERE spp_user.spp_id='$spp_id'";
+        $result = mysqli_query($conn, $query);
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $student_name = $row['student_name'];
+        }
+    } else {
+        $query = "SELECT spp_user.student_id, user.name as student_name from spp_user INNER JOIN user on spp_user.student_id = user.user_id WHERE spp_user.spp_id='$spp_id'";
+        $result = mysqli_query($conn, $query);
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $student_name = $row['student_name'];
+        }
+    }
+    
+
 ?>
 
     <div class="container p-4">
         <h2 class="text-center mb-4"> Gestión de Documentos </h2>
+        <h3 class="text-center mb-4"> PPS de <?php echo $student_name ?> </h3>
         <div class="row">
             <div class="col-md-12">
                 <?php if (isset($_SESSION['message'])) { ?>
@@ -75,7 +94,7 @@ if (isset($_SESSION['user_id'])) {
                             <tr>
                                 <td class="text-center"><?php echo $row['type'] ?></td>
                                 <td class="text-center"><?php echo $row['status'] ?></td>
-                                <td class="text-center">
+                                <td class="text-center d-flex align-items-center justify-content-center gap-2">
                                     <a href="../document/document_download.php?id=<?php echo $row['document_id']; ?> " style="text-decoration: none; color: inherit;">
                                         <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle" title="Descargar documento">
                                             <i class="fas fa-download"></i>
@@ -163,6 +182,10 @@ if (isset($_SESSION['user_id'])) {
                         <?php } ?>
                     </tbody>
                 </table>
+
+                <div class="d-flex flex-column align-items-center">
+                    <button class="btn btn-secondary green-btn btn-sm" onclick="window.history.back();">Volver</button>
+                </div>
 
                 <br>
                 <!--MODAL DE CARGAR DOCUMENTO-->

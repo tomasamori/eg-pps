@@ -64,9 +64,14 @@ if (isset($_POST['update'])) {
                         <div class="form-group m-2">
                             <input type="text" name="name" value="<?php echo $name ?>" class="form-control" placeholder="Actualizar nombre de la Carrera" required>
                         </div>
-                        <button class="btn btn-success green-btn btn-block mx-auto d-block" name="update">
-                            Editar
-                        </button>
+                        <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                            <a href="./career.php" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+                            <button class="btn btn-success green-btn" name="update">
+                                Editar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

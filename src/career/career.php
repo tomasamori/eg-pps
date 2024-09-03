@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../db.php'); 
+include('../db.php');
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -26,33 +26,54 @@ if (isset($_SESSION['user_id'])) {
 } else {
     header("Location: ../auth/login.php");
     exit();
-} 
+}
 
-include('../includes/header.php'); ?>
+include('../includes/header.php');
+
+$results_per_page = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start_from = ($page - 1) * $results_per_page;
+
+$query = "SELECT COUNT(*) AS total FROM career";
+$result = $conn->query($query);
+$row = $result->fetch_assoc();
+$total_results = $row['total'];
+$total_pages = ceil($total_results / $results_per_page);
+
+$query = "SELECT * FROM career ORDER BY career.career_id ASC LIMIT $start_from, $results_per_page";
+$result_career = mysqli_query($conn, $query);
+?>
 
 <div class="container p-4">
-    <h1 class="text-center mb-5">Gestión de Carreras</h1>
+    <div class="position-relative mb-4">
+        <a href="../crud/crud.php" class="btn btn-outline-secondary position-absolute start-0">
+            Volver
+        </a>
+        <div class="d-flex justify-content-center">
+            <h1 class="m-0">Gestión de Carreras</h1>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-3">
             <?php if (isset($_SESSION['message'])) { ?>
                 <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed crud-alert crud-alert-fixed" role="alert">
                     <?= $_SESSION['message'] ?>
                 </div>
-            <?php unset($_SESSION['message']);;
+            <?php unset($_SESSION['message']);
             } ?>
             <div class="card crud-card text-center">
-            <div class="card-header crud-card-header">
+                <div class="card-header crud-card-header">
                     Nueva Carrera
                 </div>
-            <div class="card-body">
-                <form action="career_create.php" method="POST">
-                    <div class="form-group m-2">
-                        <input type="text" name="name" class="form-control" placeholder="Nombre de la carrera" required>
-                    </div>
-                    <br>
-                    <input type="submit" class="btn btn-success green-btn btn-block mx-auto d-block" name="career_create" value="Crear Carrera">
-                </form>
-            </div>
+                <div class="card-body">
+                    <form action="career_create.php" method="POST">
+                        <div class="form-group m-2">
+                            <input type="text" name="name" class="form-control" placeholder="Nombre de la carrera" required>
+                        </div>
+                        <br>
+                        <input type="submit" class="btn btn-success green-btn btn-block mx-auto d-block" name="career_create" value="Crear Carrera">
+                    </form>
+                </div>
             </div>
         </div>
         <div class="col-md-8">
@@ -65,23 +86,16 @@ include('../includes/header.php'); ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $query = "SELECT * FROM career";
-                    $result_career = mysqli_query($conn, $query);
-                    while ($row = mysqli_fetch_array($result_career)) { ?>
+                    <?php while ($row = mysqli_fetch_array($result_career)) { ?>
                         <tr class="text-center">
                             <td><?php echo $row['career_id'] ?></td>
                             <td><?php echo $row['name'] ?></td>
                             <td class="text-center">
-                                <a href="career_update.php?career_id=<?php echo $row['career_id'] ?>" class="btn btn-primary" role="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
-                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
-                                    </svg>
+                                <a href="career_update.php?career_id=<?php echo $row['career_id'] ?>" class="btn btn-outline-secondary btn-sm rounded-circle" role="button">
+                                    <i class="fas fa-pen"></i>
                                 </a>
-                                <a href="career_delete.php?career_id=<?php echo $row['career_id'] ?>" class="btn btn-danger" role="button" onclick="return confirm('¿Estás seguro de que deseas eliminar esta carrera?');">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                    </svg>
+                                <a href="career_delete.php?career_id=<?php echo $row['career_id'] ?>" class="btn btn-outline-danger btn-sm rounded-circle" role="button" onclick="return confirm('¿Estás seguro de que deseas eliminar esta carrera?');">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
@@ -89,6 +103,23 @@ include('../includes/header.php'); ?>
                 </tbody>
             </table>
 
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <?php if ($page > 1) { ?>
+                        <li class="page-item"><a class="page-link" href="career_management.php?page=<?php echo $page - 1; ?>">Anterior</a></li>
+                    <?php } ?>
+
+                    <?php for ($i = 1; $i <= $total_pages; $i++) { ?>
+                        <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
+                            <a class="page-link" href="career_management.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($page < $total_pages) { ?>
+                        <li class="page-item"><a class="page-link" href="career_management.php?page=<?php echo $page + 1; ?>">Siguiente</a></li>
+                    <?php } ?>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

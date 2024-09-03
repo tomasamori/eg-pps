@@ -86,7 +86,7 @@
                 </span>
               <?php endif; ?>
             </button>
-            <ul class="dropdown-menu text-truncated" aria-labelledby="notificationDropdown">
+            <ul class="dropdown-menu dropdown-notification-menu text-truncated" aria-labelledby="notificationDropdown">
               <li>
                 <h6 class="dropdown-header">Notificaciones</h6>
               </li>
@@ -97,11 +97,11 @@
               $stmt->execute();
               $result = $stmt->get_result();
               if ($result->num_rows === 0): ?>
-                <li><a class='dropdown-item fw-lighter'><small>No hay notificaciones</small></a></li>
+                <li><a class='dropdown-item dropdown-notification-item fw-lighter'><small>No hay notificaciones</small></a></li>
                 <?php else:
                 while ($row = $result->fetch_assoc()): ?>
                   <div class="d-flex align-items-center justify-content-between">
-                    <button class="dropdown-item notification-link" data-notification-id="<?php echo $row["notification_id"]; ?>">
+                    <button class="dropdown-item dropdown-notification-item notification-link" data-notification-id="<?php echo $row["notification_id"]; ?>">
                       <?php if ($row["status"] === "No leída"): ?>
                         <strong><small class="d-inline-block text-truncate" style="max-width: 350px;">
                             <?php echo $row["message"]; ?>

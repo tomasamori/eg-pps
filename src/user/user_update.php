@@ -26,7 +26,7 @@ if (isset($_SESSION['user_id'])) {
 } else {
     header("Location: ../auth/login.php");
     exit();
-} 
+}
 
 if (isset($_GET['user_id'])) {
     $user_id = $_GET['user_id'];
@@ -49,13 +49,19 @@ if (isset($_POST['update'])) {
     $name = $_POST['name'];
     $career_id = $_POST['career_id'];
     $role_id = $_POST['role_id'];
-    
+
     $query = "UPDATE user SET email = '$email', password = '$password', name = '$name', career_id = '$career_id', role_id='$role_id' WHERE user_id = $user_id";
     mysqli_query($conn, $query);
 
-    $_SESSION['message'] = 'Usuario editado satisfactoriamente';
+    $_SESSION['message'] = 'Usuario editado exitosamente';
     $_SESSION['message_type'] = 'success';
-    header("Location: user.php");
+
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+        header("Location: ./user.php?page=$page");
+    } else {
+        header("Location: user.php");
+    }
 }
 ?>
 
@@ -69,7 +75,7 @@ if (isset($_POST['update'])) {
                     Editar Usuario
                 </div>
                 <div class="card-body">
-                    <form action="user_update.php?user_id=<?php echo $_GET['user_id']; ?>" method="POST">
+                    <form action="user_update.php?user_id=<?php echo $_GET['user_id']; ?>&page=<?php echo $_GET['page']?>" method="POST">
                         <div class="form-group m-2">
                             <input type="text" name="email" value="<?php echo $email ?>" class="form-control" placeholder="Actualizar email" required>
                         </div>
@@ -101,9 +107,14 @@ if (isset($_POST['update'])) {
                                 <?php } ?>
                             </select>
                         </div>
-                        <button class="btn btn-success green-btn btn-block mx-auto d-block" name="update">
-                            Editar
-                        </button>
+                        <div class="d-flex flex-row justify-content-center align-items-center gap-2">
+                            <a href="./user.php" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+                            <button class="btn btn-success green-btn" name="update">
+                                Editar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

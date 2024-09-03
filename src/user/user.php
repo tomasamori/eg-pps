@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../db.php'); 
+include('../db.php');
 
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
@@ -26,24 +26,49 @@ if (isset($_SESSION['user_id'])) {
 } else {
     header("Location: ../auth/login.php");
     exit();
-} 
+}
 
-include('../includes/header.php'); ?>
+include('../includes/header.php');
+
+$items_per_page = 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $items_per_page;
+
+$query_count = "SELECT COUNT(*) AS total FROM user WHERE deleted=0";
+$result_count = mysqli_query($conn, $query_count);
+$row_count = mysqli_fetch_assoc($result_count);
+$total_users = $row_count['total'];
+$total_pages = ceil($total_users / $items_per_page);
+
+$query = "SELECT user.user_id, user.email, user.password, user.name, career.name AS career_name, role.name AS role_name 
+          FROM user 
+          INNER JOIN career ON user.career_id = career.career_id 
+          INNER JOIN role ON user.role_id = role.role_id 
+          WHERE user.deleted=0
+          ORDER BY user.user_id ASC 
+          LIMIT $offset, $items_per_page";
+$result_users = mysqli_query($conn, $query);
+?>
 
 <div class="container mt-5">
-    <h1 class="text-center mb-5">Gestión de Usuarios</h1>
+    <div class="position-relative mb-4">
+        <a href="../crud/crud.php" class="btn btn-outline-secondary position-absolute start-0">
+            Volver
+        </a>
+        <div class="d-flex justify-content-center">
+            <h1 class="m-0">Gestión de Usuarios</h1>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-3">
             <?php if (isset($_SESSION['message'])) { ?>
                 <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed crud-alert crud-alert-fixed" role="alert">
                     <?= $_SESSION['message'] ?>
                 </div>
-            <?php unset($_SESSION['message']);;
+            <?php unset($_SESSION['message']);
             } ?>
             <div class="card crud-card text-center">
-                <div class="card-header crud-card-header">
-                    Nuevo Usuario
-                </div>
+                <div class="card-header crud-card-header">Nuevo Usuario</div>
                 <div class="card-body">
                     <form action="user_create.php" method="POST">
                         <div class="form-group m-2">
@@ -87,8 +112,6 @@ include('../includes/header.php'); ?>
                     </form>
                 </div>
             </div>
-
-
         </div>
         <div class="col-md-9">
             <table class="table table-striped table-hover">
@@ -103,10 +126,7 @@ include('../includes/header.php'); ?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $query = "SELECT user.user_id, user.email, user.password, user.name, career.name AS career_name, role.name AS role_name FROM user INNER JOIN career ON user.career_id = career.career_id INNER JOIN role ON user.role_id = role.role_id WHERE user.deleted=0";
-                    $result_users = mysqli_query($conn, $query);
-                    while ($row = mysqli_fetch_array($result_users)) { ?>
+                    <?php while ($row = mysqli_fetch_array($result_users)) { ?>
                         <tr>
                             <td><?php echo $row['user_id'] ?></td>
                             <td><?php echo $row['email'] ?></td>
@@ -114,52 +134,45 @@ include('../includes/header.php'); ?>
                             <td><?php echo $row['career_name'] ?></td>
                             <td><?php echo $row['role_name'] ?></td>
                             <td class="text-center">
-                                <a href="user_update.php?user_id=<?php echo $row['user_id'] ?>" class="btn btn-primary" role="button">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen-fill" viewBox="0 0 16 16">
-                                        <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
-                                    </svg>
+                                <a href="user_update.php?user_id=<?php echo $row['user_id'] ?>&page=<?php echo $page?>" class="btn btn-outline-secondary btn-sm rounded-circle" role="button">
+                                    <i class="fas fa-pen"></i>
                                 </a>
-                                <a href="user_delete.php?user_id=<?php echo $row['user_id'] ?>" class="btn btn-danger" role="button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                    </svg>
+                                <a href="user_delete.php?user_id=<?php echo $row['user_id'] ?>&page=<?php echo $page?>" class="btn btn-outline-danger btn-sm rounded-circle" role="button" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>
                     <?php } ?>
                 </tbody>
             </table>
+            <nav class="mt-4" aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <?php if ($page > 1): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?php echo $page - 1; ?>">Anterior</a></li>
+                    <?php endif; ?>
+
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php if ($i == $page) echo 'active'; ?>"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                    <?php endfor; ?>
+
+                    <?php if ($page < $total_pages): ?>
+                        <li class="page-item"><a class="page-link" href="?page=<?php echo $page + 1; ?>">Siguiente</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>
 
 <script>
-    const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    const toggleIcon = document.getElementById('toggleIcon');
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
 
     togglePassword.addEventListener('click', function() {
         const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
         password.setAttribute('type', type);
-
-        if (type === 'password') {
-            toggleIcon.classList.remove("fa-eye-slash");
-            toggleIcon.classList.add("fa-eye");
-        } else {
-            toggleIcon.classList.remove("fa-eye");
-            toggleIcon.classList.add("fa-eye-slash");
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            setTimeout(function() {
-                alert.classList.remove('show');
-                alert.classList.add('fade');
-            }, 3000);
-        });
+        this.classList.toggle('fa-eye-slash');
     });
 </script>
 
-<?php include("../includes/footer.php") ?>
+<?php include('../includes/footer.php'); ?>
