@@ -34,20 +34,6 @@ if ($result) {
 include("../includes/header.php");
 ?>
 
-<style>
-    .green-btn {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .green-btn:hover {
-        background-color: #49AD6D;
-        border-color: #49AD6D;
-    }
-</style>
-
-
 <div class="container my-5">
     <div class="bg-light p-5 rounded shadow-sm">
         <h1 class="text-center mb-4">

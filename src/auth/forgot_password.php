@@ -60,23 +60,6 @@ if ($result && $result->num_rows > 0) {
 }
 ?>
 
-<style>
-    .green-btn {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .green-btn:hover {
-        background-color: #49AD6D;
-        border-color: #49AD6D;
-    }
-
-    .no-underline {
-        text-decoration: none;
-    }
-</style>
-
 <div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-md-3">

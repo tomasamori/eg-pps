@@ -81,51 +81,6 @@ if (isset($_SESSION['user_id']) && $_SESSION['role_name'] == 'Alumno') {
 
 ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
-
-    .pagination .page-link {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-item.active .page-link {
-        color: #3aa661;
-        background-color: white;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-link:hover {
-        color: white;
-        background-color: #2f8b4f;
-        border-color: #2f8b4f;
-    }
-</style>
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Responsables Disponibles</h1>
     <div class="row">

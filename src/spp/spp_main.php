@@ -73,77 +73,17 @@ if ($_SESSION['role_name'] == 'Alumno') {
 
 include("../includes/header.php"); ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .tile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 180px;
-        border-radius: 10px;
-        background: #ffffff;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-        text-align: center;
-        padding: 20px;
-        overflow: hidden;
-    }
-
-    .tile.clickable {
-        cursor: pointer;
-    }
-
-    .tile.clickable:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .tile h5 {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin: 10px 0;
-        text-align: center;
-    }
-
-    .tile p {
-        font-size: 0.9rem;
-        color: #6c757d;
-        text-align: center;
-        margin: 5px 0;
-    }
-
-    .tile i {
-        font-size: 20px;
-        color: #3aa661;
-        margin-bottom: 10px;
-    }
-
-    @media (min-width: 768px) and (max-width: 992px) {
-        .tile {
-            padding: 15px;
-        }
-
-        .tile i {
-            display: none;
-        }
-    }
-</style>
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Prácticas Profesionales Supervisadas</h1>
     <div class="row">
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null) : ?>
-                <div class="tile clickable" data-bs-toggle="modal" data-bs-target="#startRequest">
+                <div class="tile-spp-main clickable" data-bs-toggle="modal" data-bs-target="#startRequest">
                     <h5><i class="fa-solid fa-file-alt me-2"></i>Solicitud de Inicio</h5>
                     <p>Completá la Solicitud de Inicio para indicar los datos esenciales y empezar tus PPS.</p>
                 </div>
             <?php else : ?>
-                <div class="tile clickable" onclick="location.href='./spp.php';">
+                <div class="tile-spp-main clickable" onclick="location.href='./spp.php';">
                     <h5><i class="fa-solid fa-file-alt me-2"></i>Solicitud de Inicio</h5>
                     <p>Completá la Solicitud de Inicio para indicar los datos esenciales y empezar tus PPS.</p>
                     <div class="badge">Nueva</div>
@@ -153,17 +93,17 @@ include("../includes/header.php"); ?>
 
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null && $mentor_name != 'Sin Asignar') : ?>
-                <div class="tile clickable" onclick="location.href='../document/document.php';">
+                <div class="tile-spp-main clickable" onclick="location.href='../document/document.php';">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
                 </div>
             <?php elseif ($mentor_name == 'Sin Asignar') : ?>
-                <div class="tile" data-bs-toggle="modal" data-bs-target="#professorAlertModal">
+                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#professorAlertModal">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
                 </div>
             <?php else : ?>
-                <div class="tile" data-bs-toggle="modal" data-bs-target="#alertModal">
+                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#alertModal">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
                 </div>
@@ -172,12 +112,12 @@ include("../includes/header.php"); ?>
 
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null) : ?>
-                <div class="tile clickable" onclick="location.href='./spp_info.php';">
+                <div class="tile-spp-main clickable" onclick="location.href='./spp_info.php';">
                     <h5><i class="fa-solid fa-circle-info me-2"></i>Información sobre Documentos</h5>
                     <p>Este espacio te guía sobre los requisitos, plazos y tipos de documentos que debes cargar.</p>
                 </div>
             <?php else : ?>
-                <div class="tile" data-bs-toggle="modal" data-bs-target="#alertModal">
+                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#alertModal">
                     <h5><i class="fa-solid fa-circle-info me-2"></i>Información sobre Documentos</h5>
                     <p>Este espacio te guía sobre los requisitos, plazos y tipos de documentos que debes cargar.</p>
                 </div>

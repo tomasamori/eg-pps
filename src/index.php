@@ -1,53 +1,6 @@
 <?php session_start(); ?>
 <?php include("includes/header.php") ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .banner {
-        background-color: #f8f9fa;
-        background: rgb(9, 121, 35);
-        background: linear-gradient(90deg, rgba(9, 121, 35, 0.5998774509803921) 0%, rgba(0, 212, 255, 1) 100%);
-    }
-
-    .banner img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    .banner-text {
-        padding-left: 10%;
-    }
-
-    @media (max-width: 768px) {
-        .banner img {
-            display: none;
-        }
-
-        .banner-text {
-            padding-left: 0;
-            text-align: center;
-        }
-
-        .banner {
-            padding: 10%;
-        }
-    }
-
-    .green-btn a {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .green-btn a:hover {
-        background-color: #49AD6D;
-        border-color: #49AD6D;
-    }
-</style>
-
 <div class="container banner rounded-5 mt-4">
     <div class="container">
         <div class="row align-items-center">
@@ -59,7 +12,7 @@
                 <?php } else { ?>
                     <a href="./auth/login.php" class="btn btn-dark btn-lg">Iniciar PPS</a>
                 <?php } ?>
-                
+
             </div>
             <div class="col-md-6 d-flex justify-content-center align-items-center">
                 <img src="./img/student.png" alt="Estudiante sosteniendo una carpeta">
@@ -100,13 +53,11 @@
     </div>
 
     <div class="text-center mt-3">
-        <div class="green-btn">
-            <?php if (isset($_SESSION["user_id"])) { ?>
-                <a href="./spp/spp_main.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
-            <?php } else { ?>
-                <a href="./auth/login.php" class="btn btn-dark btn-lg">Comienza tu Solicitud</a>
-                <?php } ?>
-        </div>
+        <?php if (isset($_SESSION["user_id"])) { ?>
+            <a href="./spp/spp_main.php" class="btn btn-dark btn-lg green-btn">Comienza tu Solicitud</a>
+        <?php } else { ?>
+            <a href="./auth/login.php" class="btn btn-dark btn-lg green-btn">Comienza tu Solicitud</a>
+        <?php } ?>
     </div>
 </div>
 

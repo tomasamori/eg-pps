@@ -1,21 +1,3 @@
-<style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-    }
-
-    body {
-        display: flex;
-        flex-direction: column;
-    }
-
-    footer {
-        margin-top: auto;
-        width: 100%;
-    }
-</style>
-
 <footer class="text-center bg-dark text-white pt-2">
     <div class="container">
         <section class="mb-2">

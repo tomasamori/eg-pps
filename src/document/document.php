@@ -42,54 +42,6 @@ if (isset($_SESSION['user_id'])) {
 
 ?>
 
-    <style>
-        body {
-            background-color: #f3f5fc;
-        }
-
-        .table {
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        .table th {
-            color: white;
-            background-color: #3aa661;
-        }
-
-        .table th,
-        .table td {
-            vertical-align: middle;
-        }
-
-        .table-hover tbody tr:hover {
-            background-color: #f1f3f9;
-        }
-
-        .green-btn {
-            color: white;
-            background-color: #3aa661;
-            border-color: #3aa661;
-        }
-
-        .green-btn:hover {
-            background-color: #49AD6D;
-            border-color: #49AD6D;
-        }
-
-        .alert-fixed-top-center {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1050;
-            width: auto;
-            max-width: 90%;
-        }
-    </style>
-
     <div class="container p-4">
         <h2 class="text-center mb-4"> Gestión de Documentos </h2>
         <div class="row">
@@ -199,7 +151,7 @@ if (isset($_SESSION['user_id'])) {
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
                                                     <?php if (empty($row['correction'])) { ?>
-                                                        <button type="submit" class="btn btn-success btn-sm" id="document_create" name="create">Guardar</button>
+                                                        <button type="submit" class="btn btn-success btn-sm green-btn" id="document_create" name="create">Guardar</button>
                                                     <?php } ?>
                                                 </div>
                                             </form>
@@ -216,7 +168,7 @@ if (isset($_SESSION['user_id'])) {
                 <!--MODAL DE CARGAR DOCUMENTO-->
                 <?php if ($role_student == $role_user) { ?>
                     <div class="text-end">
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="btn btn-success green-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Nuevo Documento
                         </button>
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

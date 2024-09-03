@@ -31,55 +31,11 @@ if (isset($_SESSION['user_id'])) {
 include("../includes/header.php");
 ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
-
-    .table th,.table td {
-        width: 33.33%;
-    }
-
-    .form-check-input:checked {
-        background-color: #28a745;
-        border-color: #28a745;
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-    }
-
-    .form-check-label {
-        color: #28a745;
-    }
-</style>
-
 <div class="container p-4">
     <div class="row">
         <div class="col-md-12">
             <h2 class="text-center mb-4">
-                PPS asignadas
+                PPS Asignadas
             </h2>
             <div class="card card-body">
                 <div class="row mb-3">
@@ -112,7 +68,7 @@ include("../includes/header.php");
 
                     <!-- Columna para el botón de imprimir -->
                     <div class="col-md-2 d-flex justify-content-end align-items-center">
-                        <a href="generate_pdf.php?year=<?php echo isset($_GET['year']) ? $_GET['year'] : ''; ?>&status_filter=<?php echo isset($_GET['status_filter']) ? '1' : '0'; ?>" class="btn btn-success">Imprimir</a>
+                        <a href="generate_pdf.php?year=<?php echo isset($_GET['year']) ? $_GET['year'] : ''; ?>&status_filter=<?php echo isset($_GET['status_filter']) ? '1' : '0'; ?>" class="btn btn-success green-btn">Imprimir</a>
                     </div>
                         </form>
                 </div>

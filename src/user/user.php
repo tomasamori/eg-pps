@@ -30,87 +30,18 @@ if (isset($_SESSION['user_id'])) {
 
 include('../includes/header.php'); ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
-
-    .card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .card-header {
-        color: white;
-        background-color: #3aa661;
-        font-family: 'Arial', sans-serif;
-        font-weight: bold;
-        padding: 7px;
-    }
-
-    .btn-success {
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .btn-success:hover {
-        background-color: #339a4e;
-        border-color: #339a4e;
-    }
-
-    .alert {
-        opacity: 1;
-        transition: opacity 0.5s ease-out;
-        text-align: center;
-    }
-
-    .alert-fixed {
-        position: fixed;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1050;
-        width: auto;
-        max-width: 80%;
-    }
-</style>
-
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Gestión de Usuarios</h1>
     <div class="row">
         <div class="col-md-3">
             <?php if (isset($_SESSION['message'])) { ?>
-                <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed" role="alert">
+                <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show alert-fixed crud-alert crud-alert-fixed" role="alert">
                     <?= $_SESSION['message'] ?>
                 </div>
             <?php unset($_SESSION['message']);;
             } ?>
-            <div class="card text-center">
-                <div class="card-header">
+            <div class="card crud-card text-center">
+                <div class="card-header crud-card-header">
                     Nuevo Usuario
                 </div>
                 <div class="card-body">
@@ -152,7 +83,7 @@ include('../includes/header.php'); ?>
                             </select>
                         </div>
                         <br>
-                        <input type="submit" class="btn btn-success btn-block mx-auto d-block" name="user_create" value="Guardar Usuario">
+                        <input type="submit" class="btn btn-success green-btn btn-block mx-auto d-block" name="user_create" value="Guardar Usuario">
                     </form>
                 </div>
             </div>

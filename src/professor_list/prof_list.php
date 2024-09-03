@@ -72,61 +72,11 @@ $stmt->execute();
 $result_users = $stmt->get_result();
 ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
-
-    .pagination .page-link {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-item.active .page-link {
-        color: #3aa661;
-        background-color: white;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-link:hover {
-        color: white;
-        background-color: #2f8b4f;
-        border-color: #2f8b4f;
-    }
-
-    .table th,
-    .table td {
-        width: 33.33%;
-    }
-</style>
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Profesores Disponibles</h1>
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-proflist">
                 <thead>
                     <tr>
                         <th>Profesor</th>

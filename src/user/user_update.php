@@ -61,50 +61,11 @@ if (isset($_POST['update'])) {
 
 <?php include("../includes/header.php") ?>
 
-<style>
-    body {
-        background-image: url('../img/auth-bg.jpg');
-        background-size: cover;
-    }
-
-
-    .form-control:focus {
-        border-color: #3aa661;
-        box-shadow: none;
-    }
-
-    .card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .card-header {
-        color: white;
-        background-color: #3aa661;
-        font-family: 'Arial', sans-serif;
-        font-weight: bold;
-        padding: 7px;
-    }
-
-    .btn-success {
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .btn-success:hover {
-        background-color: #339a4e;
-        border-color: #339a4e;
-    }
-</style>
-
-<br>
-<div class="container mt-5">
-    <div class="row">
+<div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
+    <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-md-4 mx-auto">
-            <div class="card text-center">
-                <div class="card-header">
+            <div class="card card-green text-center">
+                <div class="card-header card-header-green">
                     Editar Usuario
                 </div>
                 <div class="card-body">
@@ -140,7 +101,7 @@ if (isset($_POST['update'])) {
                                 <?php } ?>
                             </select>
                         </div>
-                        <button class="btn btn-success btn-block mx-auto d-block" name="update">
+                        <button class="btn btn-success green-btn btn-block mx-auto d-block" name="update">
                             Editar
                         </button>
                     </form>

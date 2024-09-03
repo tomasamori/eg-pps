@@ -9,75 +9,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Font Awesome -->
   <script src="https://kit.fontawesome.com/cafe638f84.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="../styles.css">
 </head>
-<style>
-  .nav-link {
-    color: black;
-  }
-
-  .nav-link:hover {
-    color: gray;
-  }
-
-  .btn:focus {
-    outline: none;
-    background-color: #3F9B5E;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
-  }
-
-  .form-control:focus {
-    border-color: #3aa661;
-    box-shadow: none;
-  }
-
-  @media (max-width: 990px) {
-    .navbar-brand {
-      display: none;
-    }
-
-    .navbar {
-      position: relative;
-    }
-
-    #userButtons,
-    #authButtons {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 5px;
-      z-index: 1050;
-    }
-
-    .collapse {
-      position: static;
-      width: 100%;
-
-    }
-
-    .navbar-collapse {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .navbar-nav {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .nav-link {
-      display: block;
-      padding: 10px 15px;
-      text-align: center;
-    }
-  }
-</style>
 
 <body>
 
@@ -85,7 +18,7 @@
   require_once __DIR__ . '/../db.php';
   if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    
+
     $query = "SELECT role_id FROM role WHERE name = 'Administrador'";
     $result = $conn->query($query);
     if ($result && $result->num_rows > 0) {

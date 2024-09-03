@@ -131,57 +131,12 @@ if ($_SESSION['role_name'] == 'Profesor') {
 include("../includes/header.php");
 ?>
 
-<style>
-    body {
-        background-color: #f3f5fc;
-    }
-
-    .table {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-    }
-
-    .table th {
-        color: white;
-        background-color: #3aa661;
-    }
-
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: #f1f3f9;
-    }
-
-    .pagination .page-link {
-        color: white;
-        background-color: #3aa661;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-item.active .page-link {
-        color: #3aa661;
-        background-color: white;
-        border-color: #3aa661;
-    }
-
-    .pagination .page-link:hover {
-        color: white;
-        background-color: #2f8b4f;
-        border-color: #2f8b4f;
-    }
-</style>
-
 <div class="container mt-5">
     <h1 class="text-center mb-5">Prácticas Profesionales Supervisadas</h1>
     <div class="row">
         <?php if ($_SESSION['role_name'] == 'Profesor') : ?>
             <div class="text-end mb-3">
-                <a href="../spp/spp_report.php" class="btn btn-success">
+                <a href="../spp/spp_report.php" class="btn btn-success green-btn">
                     Imprimir
                 </a>
             </div>

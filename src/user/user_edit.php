@@ -80,92 +80,14 @@ unset($_SESSION['message']);
 include("../includes/header.php");
 ?>
 
-<style>
-    body {
-        background-image: url('../img/auth-bg.jpg');
-        background-size: cover;
-    }
-
-    .card {
-        border-radius: 12px;
-        border: none;
-        padding: 20px;
-        background-color: #ffffff;
-    }
-
-    .form-control:focus {
-        border-color: #3aa661;
-        box-shadow: none;
-    }
-
-    img.rounded-circle {
-        border: 2px solid black;
-    }
-
-    a {
-        color: #3aa661;
-        font-weight: 600;
-    }
-
-    a:hover {
-        color: #2e854d;
-    }
-
-    .btn-primary {
-        background-color: #3aa661;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-size: 16px;
-    }
-
-    .btn-primary:hover {
-        background-color: #2e854d;
-    }
-
-    .modal-content {
-        border-radius: 15px;
-    }
-
-    .modal-header {
-        border-bottom: none;
-        background-color: #3aa661;
-        color: #ffffff;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-    }
-
-    .modal-title {
-        font-size: 20px;
-        font-weight: 700;
-    }
-
-    .modal-body {
-        padding: 20px;
-    }
-
-    .modal-footer {
-        border-top: none;
-    }
-
-    .close {
-        color: #fff;
-        opacity: 1;
-    }
-
-    .close:hover {
-        color: #f1f1f1;
-    }
-</style>
-
-<div class="container-fluid">
+<div class="container-fluid" style="background-image: url('../img/auth-bg.jpg'); background-size: cover;">
     <div class="row justify-content-center align-items-center" style="height: 80vh;">
         <div class="col-md-6 col-lg-4">
-            <div class="card card-body text-center shadow-lg">
+            <div class="card card-user-edit card-body text-center shadow-lg">
                 <h2 class="mb-4">Editar Perfil</h2>
                 <form action="user_edit.php?user_id=<?php echo htmlspecialchars($user_id); ?>" method="POST">
                     <div class="form-group mb-2">
-                        <a href="#" class="rounded-circle" width="150" height="150" data-bs-toggle="modal" data-bs-target="#changePhotoModal"><img src="<?php echo htmlspecialchars($photo); ?>" class="rounded-circle" width="150" height="150" alt="Foto de Perfil del Usuario"></a>
+                        <a href="#" class="user-edit rounded-circle rounded-circle-user-edit" width="150" height="150" data-bs-toggle="modal" data-bs-target="#changePhotoModal"><img src="<?php echo htmlspecialchars($photo); ?>" class="rounded-circle rounded-circle-user-edit" width="150" height="150" alt="Foto de Perfil del Usuario"></a>
                         <div class="pt-2 text-center fs-5 fw-bold">
                             <?php echo htmlspecialchars($name); ?>
                         </div>
@@ -193,7 +115,7 @@ include("../includes/header.php");
                             </div>
                         </div>
                     <?php endif; ?>
-                    <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar Contraseña</button>
+                    <button type="button" class="btn btn-primary green-btn mt-2" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Cambiar Contraseña</button>
                 </form>
             </div>
         </div>
@@ -202,19 +124,19 @@ include("../includes/header.php");
 
 <div class="modal fade" id="changePhotoModal" tabindex="-1" role="dialog" aria-labelledby="changePhotoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePhotoModalLabel">Cambiar Foto de Perfil</h5>
+        <div class="modal-content modal-content-user-edit">
+            <div class="modal-header modal-header-user-edit">
+                <h5 class="modal-title modal-title-user-edit" id="changePhotoModalLabel">Cambiar Foto de Perfil</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-body-user-edit">
                 <form action="user_edit.php?user_id=<?php echo htmlspecialchars($user_id); ?>" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label class="mb-2" for="photo">Seleccionar nueva foto de perfil (máx. 300 KB)</label>
                         <input type="file" name="photo" id="photo" class="form-control" accept=".jpeg,.jpg,.png" required>
                     </div>
                     <div class="form-group text-center mt-3">
-                        <button type="submit" class="btn btn-primary" name="edit">Actualizar Foto</button>
+                        <button type="submit" class="btn btn-primary green-btn" name="edit">Actualizar Foto</button>
                     </div>
                 </form>
             </div>
@@ -224,33 +146,33 @@ include("../includes/header.php");
 
 <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Cambiar Contraseña</h5>
+        <div class="modal-content modal-content-user-edit">
+            <div class="modal-header modal-header-user-edit">
+                <h5 class="modal-title modal-title-user-edit" id="changePasswordModalLabel">Cambiar Contraseña</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-body-user-edit">
                 <form action="user_edit.php?user_id=<?php echo htmlspecialchars($user_id); ?>" method="POST">
                     <div class="form-group m-3 mt-2 position-relative">
                         <input type="password" name="current_password" id="current_password" class="form-control" placeholder="Contraseña Actual" required>
-                        <button type="button" id="toggleCurrentPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                        <button type="button" id="toggleCurrentPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle rounded-circle-user-edit" style="right: 10px; top: 50%; transform: translateY(-50%);">
                             <i id="toggleIcon" class="fa-regular fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group m-3 mt-2 position-relative">
                         <input type="password" name="new_password" id="new_password" class="form-control" placeholder="Nueva Contraseña" required>
-                        <button type="button" id="toggleNewPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                        <button type="button" id="toggleNewPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle rounded-circle-user-edit" style="right: 10px; top: 50%; transform: translateY(-50%);">
                             <i id="toggleIcon" class="fa-regular fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group m-3 mt-2 position-relative">
                         <input type="password" name="confirm_new_password" id="confirm_new_password" class="form-control" placeholder="Repetir Nueva Contraseña" required>
-                        <button type="button" id="toggleConfirmPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                        <button type="button" id="toggleConfirmPassword" class="btn btn-sm btn-outline-secondary position-absolute border-0 rounded-circle rounded-circle-user-edit" style="right: 10px; top: 50%; transform: translateY(-50%);">
                             <i id="toggleIcon" class="fa-regular fa-eye"></i>
                         </button>
                     </div>
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-primary mt-3">Actualizar Contraseña</button>
+                        <button type="submit" class="btn btn-primary green-btn mt-3">Actualizar Contraseña</button>
                     </div>
                 </form>
             </div>
