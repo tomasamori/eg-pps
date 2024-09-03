@@ -95,7 +95,7 @@ if (isset($_POST['create'])) {
             $mail->send();
             echo "<script language='JavaScript'>
             alert('Corrección registrada, notificación y correo enviados');
-            window.location.assign('document.php');
+            window.location.assign('document.php?&spp_id=$spp_id');
             </script>";
         } catch (Exception $e) {
             echo "<script language='JavaScript'>

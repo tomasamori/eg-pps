@@ -36,7 +36,7 @@ if (isset($_POST['document_id'])) {
         $stmt->bind_param("iis", $sender_id, $student_id, $message);
         $stmt->execute();
 
-        header("Location: ../document/document.php");
+        header("Location: ../document/document.php?&spp_id=$spp_id");
     } else {
         $_SESSION['message'] = 'Error al aprobar el documento';
         $_SESSION['message_type'] = 'danger';
