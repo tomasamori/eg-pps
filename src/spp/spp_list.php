@@ -70,12 +70,11 @@ if ($_SESSION['role_name'] == 'Profesor') {
                  student.name AS student_name, 
                  student.email AS student_email, 
                  supervisor.user_id AS supervisor_id,
-                 supervisor.name AS supervisor_name, 
-                 supervisor.email AS supervisor_email,
+                 COALESCE(supervisor.name, 'Sin Asignar') AS supervisor_name, 
+                 COALESCE(supervisor.email, 'Sin Asignar') AS supervisor_email,
                  mentor.user_id AS mentor_id,
-                 mentor.user_id AS mentor_id,
-                 mentor.name AS mentor_name,
-                 mentor.email AS mentor_email
+                 COALESCE(mentor.name, 'Sin Asignar') AS mentor_name,
+                 COALESCE(mentor.email, 'Sin Asignar') AS mentor_email
                 FROM spp
                 INNER JOIN spp_user ON spp.spp_id = spp_user.spp_id
                 LEFT JOIN user AS student ON spp_user.student_id = student.user_id
@@ -109,12 +108,11 @@ if ($_SESSION['role_name'] == 'Profesor') {
                  student.name AS student_name, 
                  student.email AS student_email, 
                  supervisor.user_id AS supervisor_id,
-                 supervisor.name AS supervisor_name, 
-                 supervisor.email AS supervisor_email,
+                 COALESCE(supervisor.name, 'Sin Asignar') AS supervisor_name, 
+                 COALESCE(supervisor.email, 'Sin Asignar') AS supervisor_email,
                  mentor.user_id AS mentor_id,
-                 mentor.user_id AS mentor_id,
-                 mentor.name AS mentor_name,
-                 mentor.email AS mentor_email
+                 COALESCE(mentor.name, 'Sin Asignar') AS mentor_name,
+                 COALESCE(mentor.email, 'Sin Asignar') AS mentor_email
                 FROM spp
                 INNER JOIN spp_user ON spp.spp_id = spp_user.spp_id
                 LEFT JOIN user AS student ON spp_user.student_id = student.user_id
