@@ -1,6 +1,6 @@
 <footer class="text-center bg-dark text-white pt-2">
     <div class="container">
-        <section class="mb-2">
+        <div class="mb-2">
             <img src="../img/Footer-UTN.png" alt="Logo-UTN" class="navbar-brand-img mr-1 img-fluid"
                 style="max-height: 60px;">
             <br>
@@ -44,11 +44,9 @@
                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
                 </svg>
             </a>
-        </section>
+        </div>
     </div>
 </footer>
-
-</body>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
@@ -56,5 +54,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
+
+</body>
 
 </html>
