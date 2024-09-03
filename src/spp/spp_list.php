@@ -38,7 +38,7 @@ if (isset($_SESSION['user_id'])) {
         $role_user = $row['role_id'];
     }
 
-    if ($role_user !== $role_mentor || $role_user !== $role_supervisor || $role_user !== $role_admin) {
+    if ($role_user !== $role_mentor && $role_user !== $role_supervisor && $role_user !== $role_admin) {
         header("Location: ../index.php");
         exit();
     }
@@ -181,11 +181,13 @@ include("../includes/header.php");
 <div class="container mt-5">
     <h1 class="text-center mb-5">Prácticas Profesionales Supervisadas</h1>
     <div class="row">
-        <div class="text-end mb-3">
-            <a href="../spp/spp_report.php" class="btn btn-success">
-                Imprimir
-            </a>
-        </div>
+        <?php if ($_SESSION['role_name'] == 'Profesor') : ?>
+            <div class="text-end mb-3">
+                <a href="../spp/spp_report.php" class="btn btn-success">
+                    Imprimir
+                </a>
+            </div>
+        <?php endif; ?>
         <div class="col-md-12">
             <table class="table table-striped table-hover">
                 <thead>
@@ -237,7 +239,7 @@ include("../includes/header.php");
 
                                 <?php if (($_SESSION['role_name'] == 'Responsable' || $_SESSION['role_name'] == 'Administrador') && (is_null($row['mentor_id']))) : ?>
                                     <button type="button" class="btn btn-outline-success btn-sm rounded-circle" data-bs-toggle="modal" data-bs-target="#assignMentorModal<?php echo $row['spp_id']; ?>" title="Asignar Profesor">
-                                        <i class="fas fa-user-plus"></i>
+                                        <i class="fa-solid fa-user-plus fa-sm"></i>
                                     </button>
                                 <?php endif; ?>
 

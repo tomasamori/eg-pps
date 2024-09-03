@@ -6,6 +6,11 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+if (!isset($_SESSION['role_name']) || ($_SESSION['role_name'] === 'Profesor' || $_SESSION['role_name'] === 'Responsable' || $_SESSION['role_name'] === 'Administrador')) {
+    header("Location: ../spp/spp_list.php");
+    exit();
+}
+
 include("../db.php");
 
 $message = '';

@@ -25,7 +25,7 @@ if (isset($_SESSION['user_id'])) {
         $role_user = $row['role_id'];
     }
 
-    if ($role_user !== $role_mentor || $role_user !== $role_admin) {
+    if ($role_user !== $role_mentor && $role_user !== $role_admin) {
         header("Location: ../index.php");
         exit();
     }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Aug 27, 2024 at 10:25 PM
+-- Generation Time: Sep 03, 2024 at 12:23 AM
 -- Server version: 8.0.39
 -- PHP Version: 8.2.22
 
@@ -81,10 +81,8 @@ CREATE TABLE `notification` (
 --
 
 INSERT INTO `notification` (`notification_id`, `sender_id`, `receiver_id`, `timestamp`, `status`, `message`, `deleted`) VALUES
-(1, 5, 11, '2024-08-22 18:42:48', 'Leída', 'Pelotudo de mierda', 0),
-(2, 5, 11, '2024-08-22 18:45:32', 'Leída', 'Pelotudo de mierda', 0),
-(3, 5, 11, '2024-08-22 18:45:42', 'Leída', 'Pelotudo de mierda', 1),
-(4, 5, 11, '2024-08-22 18:46:10', 'Leída', 'Todo boludo sos', 1);
+(1, 1, 3, '2024-09-03 00:02:00', 'No leída', 'Se ha registrado una nueva solicitud de PPS con número de identificación 1', 0),
+(2, 1, 3, '2024-09-03 00:05:28', 'No leída', 'Se ha registrado una nueva solicitud de PPS con número de identificación 2', 0);
 
 -- --------------------------------------------------------
 
@@ -105,7 +103,8 @@ CREATE TABLE `role` (
 INSERT INTO `role` (`role_id`, `name`, `deleted`) VALUES
 (1, 'Alumno', 0),
 (2, 'Profesor', 0),
-(3, 'Admin', 0);
+(3, 'Administrador', 0),
+(4, 'Responsable', 0);
 
 -- --------------------------------------------------------
 
@@ -134,19 +133,8 @@ CREATE TABLE `spp` (
 --
 
 INSERT INTO `spp` (`spp_id`, `organization_name`, `organization_email`, `organization_phone`, `organization_address`, `organization_city`, `organization_state`, `organization_zip`, `organization_contact`, `start_date`, `end_date`, `status`, `deleted`) VALUES
-(1, 'globant', 'contactus@globant.com.ar', '211222111', 'calle falsa 123', 'Rosario', 'something?', 2131, '', '2024-03-24', NULL, 'Finalizada', 0),
-(2, 'Accenture', 'contactus@accenture.com', '123456789', '123 Main St', 'New York', 'NY', 10001, '', '2024-04-01', NULL, 'En curso', 0),
-(3, 'IBM', 'contactus@ibm.com', '987654321', '456 Elm St', 'Los Angeles', 'CA', 90001, '', '2024-04-15', NULL, 'En curso', 0),
-(4, 'Microsoft', 'contactus@microsoft.com', '111222333', '789 Oak St', 'Chicago', 'IL', 60001, '', '2024-05-01', NULL, 'En curso', 0),
-(5, 'Google', 'contactus@google.com', '444555666', '321 Pine St', 'San Francisco', 'CA', 90002, '', '2024-05-15', NULL, 'En curso', 0),
-(6, 'Amazon', 'contactus@amazon.com', '777888999', '654 Birch St', 'Seattle', 'WA', 98101, '', '2024-06-01', NULL, 'En curso', 0),
-(7, 'Facebook', 'contactus@facebook.com', '999888777', '987 Cedar St', 'Austin', 'TX', 78701, '', '2024-06-15', NULL, 'En curso', 0),
-(8, 'Apple', 'contactus@apple.com', '333444555', '147 Walnut St', 'Cupertino', 'CA', 95014, '', '2024-07-01', NULL, 'En curso', 0),
-(9, 'Tesla', 'contactus@tesla.com', '666777888', '369 Maple St', 'Palo Alto', 'CA', 94301, '', '2024-07-15', NULL, 'En curso', 0),
-(10, 'Netflix', 'contactus@netflix.com', '222333444', '753 Oak St', 'Los Gatos', 'CA', 95030, '', '2024-08-01', NULL, 'En curso', 0),
-(11, 'Uber', 'contactus@uber.com', '888999000', '159 Elm St', 'San Francisco', 'CA', 94105, '', '2024-08-15', NULL, 'En curso', 0),
-(12, 'SpaceX', 'contactus@spacex.com', '000111222', '852 Pine St', 'Hawthorne', 'CA', 90250, '', '2024-09-01', NULL, 'En curso', 0),
-(15, 'Hyperx', 'hyperx@gmail.com', '34154512851', 'Zeballos 123', 'Rosario', 'Santa Fe', 2000, 'Migue Granados', '2024-03-26', NULL, 'Pendiente de aprobación', 0);
+(1, 'Globant', 'practicas@globant.com', '01141091700', 'Alvear 1670', 'Rosario', 'Santa Fe', 2000, 'John Doe', '2024-09-03', NULL, 'Sin Asignar', 0),
+(2, 'Accenture', 'practicas@accenture.com', '03414478300', 'Madres Plaza 25 de Mayo 3020', 'Rosario', 'Santa Fe', 2000, 'Javier López', '2024-09-03', NULL, 'Sin Asignar', 0);
 
 -- --------------------------------------------------------
 
@@ -167,17 +155,8 @@ CREATE TABLE `spp_user` (
 --
 
 INSERT INTO `spp_user` (`spp_id`, `supervisor_id`, `mentor_id`, `student_id`, `deleted`) VALUES
-(1, 9, 4, 7, 0),
-(2, 9, 4, 7, 0),
-(3, 9, 4, 7, 0),
-(4, 9, 4, 7, 0),
-(5, 9, 4, 7, 0),
-(6, 9, 4, 7, 0),
-(7, 9, 4, 7, 0),
-(8, 9, 4, 7, 0),
-(9, 9, 4, 7, 0),
-(10, 9, 4, 7, 0),
-(15, NULL, NULL, 10, 0);
+(1, NULL, NULL, 12, 0),
+(2, NULL, NULL, 13, 0);
 
 -- --------------------------------------------------------
 
@@ -203,19 +182,39 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `email`, `password`, `name`, `photo`, `deleted`, `reset_token`, `reset_token_expires_at`, `career_id`, `role_id`) VALUES
-(3, 'anom117utn@gmail.com', '$2y$10$A7zRC53ezr4ZNkPWnAnOFuib39N7y44YlRY7yD2z.mbgji4Ta4Jzy', 'Santiago', '../img/profiles/default.png', 0, NULL, NULL, 1, 2),
-(4, 'tomasamori@gmail.com', '$2y$10$UM2y8lMBrNokq88paY0CSuDUejzVaW9m0SmBu9vWZBwZtj2oz//Dm', 'Tomás Amori', '../img/profiles/4.png', 0, NULL, NULL, 2, 2),
-(5, 'matiasmayor@gmail.com', '$2y$10$2oGdaM9ytSzPgyn/W2atWe.wiRlZ/o8EreJDRJELFphyXqlOeuZWm', 'Matías Mayor', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(6, 'manuelferrareto@gmail.com', '$2y$10$zv33sdTuMe31NeQZGCuJZuNAkUpy7euAMtk4.Q5NJ9XJRQvoCNHSu', 'Manuel Ferrareto', '../img/profiles/default.png', 0, NULL, NULL, 3, 2),
-(7, 'santiagoatombolini@gmail.com', '$2y$10$ZFHO4eRLDq6Ftz0.dbNONO45o260uUlIKk7AZsLS5MiZw1mNL4gC2', 'Santiago Tombolini', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(8, 'anom117utn@gmail.com', '$2y$10$f323D5jBY8u7WOiDPnRm4.y9uV.fpnhLeuXhODHJkXA2w09H18Ms2', 'Santiago', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(9, 'picho.utn@gmail.com', '123456789', 'picho', '../img/profiles/default.png', 0, NULL, NULL, NULL, 2),
-(10, 'matias.mayor99@gmail.com', '$2y$10$L5BaPgomPhVfyMv2AE12R.JL.f4BcYnvm1MADf8yM.kQAmOlgNtZi', 'Matias Mayor', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(11, 'tomas.amori@gmail.com', '$2y$10$Qo5ug/BtsWC0Ur10DI66pusAWNPsrE0XSLcdMBXaufUcV3np8f0n2', 'Tomás Amori', '../img/profiles/11.png', 0, NULL, NULL, 2, 2),
-(12, 'a@gmail.com', '$2y$10$7nO8qk/sE8HgfDNqDaClWeaB/j8iGjK./rVIcD1cppGmjzmxoVize', 'a e i o u', '../img/profiles/default.png', 0, NULL, NULL, 1, 2),
-(13, 'ae@gmail.com', '$2y$10$aNbWI8Ytm.efarxy6k7duOvgOXON82grKMneAh0O1Nk7iVUO.TZa6', 'roberto carlos', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(14, 'terrible@gmail.com', '$2y$10$KLUrVKgS7qSmQtD2CRE48O0y1x1ffjEjOBBCz4UUnuHlfUma1.sCS', 'terrible', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
-(15, 'toamori@gmail.com', '$2y$10$jHla5SoF08gnD34B2c9QVuaRxmE.UiHQO/ysUtdJ4ki33aCard62i', 'Roberto Carlos', '../img/profiles/default.png', 0, NULL, NULL, 1, 2);
+(1, 'pps@frro.utn.edu.ar', '$2y$10$ToTS4VLkoAX3MM1sG1M3k.6PMA3KbpdyQuJZ0780B7AXwsZO3JFHG', 'PPS FRRo Admin', '../img/profiles/default.png', 0, NULL, NULL, 2, 3),
+(2, 'responsable.mecanica@frro.utn.edu.ar', '$2y$10$Zr4nwMV0XmS2DVFtehI9T.vvVYmNzSqDI31HX10rdzhOyBeTAC.0K', 'Responsable Ingeniería Mecánica', '../img/profiles/default.png', 0, NULL, NULL, 1, 4),
+(3, 'responsable.sistemas@frro.utn.edu.ar', '$2y$10$SAIz5YxqLPPA/KsuOwhv7eaCP2HI8fflnlzk.HUzoQmsbHaiaPupC', 'Responsable Ingeniería en Sistemas', '../img/profiles/default.png', 0, NULL, NULL, 2, 4),
+(4, 'responsable.electrica@frro.utn.edu.ar', '$2y$10$YcdJjXCetTUet5isryqJJO/av8NU.cJ1b7tsMWJEhLUsCl7SDfEIu', 'Responsable Ingeniería Eléctrica', '../img/profiles/default.png', 0, NULL, NULL, 3, 4),
+(5, 'responsable.quimica@frro.utn.edu.ar', '$2y$10$5TjL3XxcnyHlt5uNRX7K9uh6qg5OYfX9.a7RnSK.DPgiRjEW6uxoy', 'Responsable Ingeniería Química', '../img/profiles/default.png', 0, NULL, NULL, 4, 4),
+(6, 'responsable.civil@frro.utn.edu.ar', '$2y$10$kb2sitKpNocuzqE2mCw.AeMiGEYoHypYyeqzRPyBdqLDbAgxIalTK', 'Responsable Ingeniería Civil', '../img/profiles/default.png', 0, NULL, NULL, 5, 4),
+(7, 'profesor.sistemas@frro.utn.edu.ar', '$2y$10$tRNRhCVbnzuoyRqOVNRSS.ucnO6Biv2RjBEgC2MyJLP328QZqc4A2', 'Profesor Ingeniería en Sistemas', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(8, 'profesor.mecanica@frro.utn.edu.ar', '$2y$10$387RZKP4SUA1qKfQHveQHuN9cC3hCKWTvv67xj/3pXNRyz2JjGcke', 'Profesor Ingeniería Mecánica', '../img/profiles/default.png', 0, NULL, NULL, 1, 2),
+(9, 'profesor.electrica@frro.utn.edu.ar', '$2y$10$bQ2l.O2xwjF6JSErwyhLnu9HlH6gAD5aqW2LIkn36AEWWn/OzX/..', 'Profesor Ingeniería Eléctrica', '../img/profiles/default.png', 0, NULL, NULL, 3, 2),
+(10, 'profesor.quimica@frro.utn.edu.ar', '$2y$10$Tsc66G17DGvujZS9IxM.3ukpbJZ7WV87DIqt5J5S46hfnXCzAw.oy', 'Profesor Ingeniería Química', '../img/profiles/default.png', 0, NULL, NULL, 4, 2),
+(11, 'profesor.civil@frro.utn.edu.ar', '$2y$10$wgFsc/fwJlny64ahbF7kiuZZSqxOBGnwTFvpYcnEy.NJj2I2LpXwa', 'Profesor Ingeniería Civil', '../img/profiles/default.png', 0, NULL, NULL, 5, 2),
+(12, 'alumno1.sistemas@frro.utn.edu.ar', '$2y$10$4eEIFx7WAuY0U7wlBTMGCOB/FTAxo4jr6cNS4ALrRiNVDp0r7DOdq', 'Alumno 1', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(13, 'alumno2.sistemas@frro.utn.edu.ar', '$2y$10$iwFAqh07DFpxVsHDGNXwR.TTtDb52h6hRIpeAULnqJseaQiugkFsi', 'Alumno 2', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(14, 'alumno3.sistemas@frro.utn.edu.ar', '$2y$10$5NUZPK5LC/1GnhN8fSxPJu4QoRVnO4YllKHGxZ504h8JPSHHY278a', 'Alumno 3', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(15, 'alumno4.sistemas@frro.utn.edu.ar', '$2y$10$FjqZR72x47TA./VUKDgyo.6uAJdHCFtYSTyNWIUcBHd8EbeUzt16a', 'Alumno 4', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(16, 'alumno5.sistemas@frro.utn.edu.ar', '$2y$10$cigtODCuVKWGKsFcM5c6Oef3NyK49yl3pwQTM/RXic2.r/K6yTDRi', 'Alumno 5', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(17, 'alumno6.sistemas@frro.utn.edu.ar', '$2y$10$tIOiPqOvBUsBwbNmibIjoOOy.1tlkMeGAV9rghb82qBX/1lXjQ5vG', 'Alumno 6', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(18, 'alumno7.sistemas@frro.utn.edu.ar', '$2y$10$MFPgFH0/MCFucIZiU38TV.L06tZ0LkvSlc1DAQsAIrBuMFXtzlisq', 'Alumno 7', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(19, 'alumno8.sistemas@frro.utn.edu.ar', '$2y$10$.wNjOsGkSiLIFOYENJqeYuUJiQPP7z2x4ahKVZ07GjrcKCBgLuJRa', 'Alumno 8', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(20, 'alumno9.sistemas@frro.utn.edu.ar', '$2y$10$l7niSo3m0MuyGPHJuCBvSuiozpvhETyP2w.cCDDYCn.aRPW1LfQ8m', 'Alumno 9', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(21, 'alumno10.sistemas@frro.utn.edu.ar', '$2y$10$XQBJDvs9t5w2X8LShNMvG.GkDuq8o3VU9ohz2EDXb9CBiyV4.7PTm', 'Alumno 10', '../img/profiles/default.png', 0, NULL, NULL, 2, 1),
+(22, 'alumno1.quimica@frro.utn.edu.ar', '$2y$10$OBtkIczuZGwowpC.udDj6OClNeONmxTLzKQTrfArrj1Y8NnT60R5C', 'Alumno 1', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(23, 'alumno2.quimica@frro.utn.edu.ar', '$2y$10$IFTaMul3DqwqL.IzqgLDi.xSTdQEXYDZSHTaSzpQttSICwrQOJJ1S', 'Alumno 2', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(24, 'alumno3.quimica@frro.utn.edu.ar', '$2y$10$wCsFt8zqTzJV187fIk8ururh5WlRZYSTD/nspjiALY8Ekqo00EoVS', 'Alumno 3', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(25, 'alumno4.quimica@frro.utn.edu.ar', '$2y$10$AeGnYr0zT4v3sCyLWYWsyOC2S90Ya.R/Nt.2051ULPXKOiOOM5wm.', 'Alumno 4', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(26, 'alumno5.quimica@frro.utn.edu.ar', '$2y$10$jvJAb07WBy0SGU5QlfsDGulOOBuK0VwAIpbvCJaifz6lEHCz7w0XK', 'Alumno 5', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(27, 'alumno6.quimica@frro.utn.edu.ar', '$2y$10$GgqFi9.r86HRLWAPSrIL5OTvU7LB/a8AoMPX58t88OqyE61a3h3OK', 'Alumno 6', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(28, 'alumno7.quimica@frro.utn.edu.ar', '$2y$10$6/28ZCYW0y2JMDG/XcfoaeZG0TqQailF37t5KmPRvoeGYd7/YbaJO', 'Alumno 7', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(29, 'alumno8.quimica@frro.utn.edu.ar', '$2y$10$41zljm8HnHXrjadOTCipfe3K3Gz5SRSGWy9VohfzJjOSRhPrHTpVq', 'Alumno 8', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(30, 'alumno9.quimica@frro.utn.edu.ar', '$2y$10$oRit2tgtnSXW0g9QvN6QluEjA2kbAJCE8YzvHSt1mptBqALY/X8Ru', 'Alumno 9', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(31, 'alumno10.quimica@frro.utn.edu.ar', '$2y$10$ScFEBUmpvFxUffBMphyaueG.9dC.qdzdtPTSTjEM8QHqeIgH2d5Vm', 'Alumno 10', '../img/profiles/default.png', 0, NULL, NULL, 4, 1),
+(32, 'profesor2.sistemas@frro.utn.edu.ar', '$2y$10$95UR7mCBfxwYPnKg08wA8u7Xoiva6W9EdkV1lWfO/n9nh3RO3dGH6', 'Profesor Ingeniería en Sistemas 2', '../img/profiles/default.png', 0, NULL, NULL, 2, 2),
+(33, 'profesor2.quimica@frro.utn.edu.ar', '$2y$10$52gX1poL/W0jc5w2NJpiw.Q05zkLG59H8qyAkjhx7sOFSv89V7kou', 'Profesor Ingeniería Química 2', '../img/profiles/default.png', 0, NULL, NULL, 4, 2);
 
 --
 -- Indexes for dumped tables
@@ -292,25 +291,25 @@ ALTER TABLE `document`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `notification_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `role_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `spp`
 --
 ALTER TABLE `spp`
-  MODIFY `spp_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `spp_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables
