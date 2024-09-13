@@ -72,7 +72,7 @@ $result_users = mysqli_query($conn, $query);
                 <div class="card-body">
                     <form action="user_create.php" method="POST">
                         <div class="form-group m-2">
-                            <input type="email" name="email" class="form-control" placeholder="Email" autofocus required>
+                            <input type="email" name="email" class="form-control" placeholder="Email" required>
                         </div>
                         <div class="form-group m-2 position-relative">
                             <input type="password" id="password" name="password" class="form-control" placeholder="Contraseña" required>

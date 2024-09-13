@@ -44,6 +44,26 @@
                     <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
                 </svg>
             </a>
+
+            <button type="button" class="btn btn-link btn-floating btn-lg text-white m-1" data-bs-toggle="modal"
+                data-bs-target="#siteMapModal">
+                <i class="fa-solid fa-map"></i>
+            </button>
+
+            <div class="modal fade" id="siteMapModal" tabindex="-1" aria-labelledby="siteMapModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-dark" id="siteMapModalLabel">Mapa del Sitio</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="../img/site_map.png" alt="Mapa de Sitio" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </footer>
