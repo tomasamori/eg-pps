@@ -78,49 +78,49 @@ include("../includes/header.php"); ?>
     <div class="row">
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null) : ?>
-                <div class="tile-spp-main clickable" data-bs-toggle="modal" data-bs-target="#startRequest">
+                <button class="tile-spp-main clickable border-0" data-bs-toggle="modal" data-bs-target="#startRequest">
                     <h5><i class="fa-solid fa-file-alt me-2"></i>Solicitud de Inicio</h5>
                     <p>Completá la Solicitud de Inicio para indicar los datos esenciales y empezar tus PPS.</p>
-                </div>
+                </button>
             <?php else : ?>
-                <div class="tile-spp-main clickable" onclick="location.href='./spp.php';">
+                <button class="tile-spp-main clickable border-0" onclick="location.href='./spp.php';">
                     <h5><i class="fa-solid fa-file-alt me-2"></i>Solicitud de Inicio</h5>
                     <p>Completá la Solicitud de Inicio para indicar los datos esenciales y empezar tus PPS.</p>
                     <div class="badge">Nueva</div>
-                </div>
+                </button>
             <?php endif; ?>
         </div>
 
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null && $mentor_name != 'Sin Asignar') : ?>
-                <div class="tile-spp-main clickable" onclick="location.href='../document/document.php';">
+                <button class="tile-spp-main clickable border-0" onclick="location.href='../document/document.php';">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
-                </div>
+                </button>
             <?php elseif ($mentor_name == 'Sin Asignar') : ?>
-                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#professorAlertModal">
+                <button class="tile-spp-main border-0" data-bs-toggle="modal" data-bs-target="#professorAlertModal">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
-                </div>
+                </button>
             <?php else : ?>
-                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#alertModal">
+                <button class="tile-spp-main border-0" data-bs-toggle="modal" data-bs-target="#alertModal">
                     <h5><i class="fa-solid fa-tasks me-2"></i>Documentos</h5>
                     <p>Subí todos los documentos necesarios para tu Práctica Profesional Supervisada en este espacio.</p>
-                </div>
+                </button>
             <?php endif; ?>
         </div>
 
         <div class="col-md-4 mb-4">
             <?php if ($spp_id != null) : ?>
-                <div class="tile-spp-main clickable" onclick="location.href='./spp_info.php';">
+                <button class="tile-spp-main clickable border-0" onclick="location.href='./spp_info.php';">
                     <h5><i class="fa-solid fa-circle-info me-2"></i>Información sobre Documentos</h5>
                     <p>Este espacio te guía sobre los requisitos, plazos y tipos de documentos que debes cargar.</p>
-                </div>
+                </button>
             <?php else : ?>
-                <div class="tile-spp-main" data-bs-toggle="modal" data-bs-target="#alertModal">
+                <button class="tile-spp-main border-0" data-bs-toggle="modal" data-bs-target="#alertModal">
                     <h5><i class="fa-solid fa-circle-info me-2"></i>Información sobre Documentos</h5>
                     <p>Este espacio te guía sobre los requisitos, plazos y tipos de documentos que debes cargar.</p>
-                </div>
+                </button>
             <?php endif; ?>
         </div>
 

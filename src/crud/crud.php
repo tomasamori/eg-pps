@@ -35,23 +35,23 @@ include('../includes/header.php'); ?>
     <div class="row">
 
         <div class="col-md-3 mb-4">
-            <div class="tile" onclick="location.href='../user/user.php';">
+            <a href="../user/user.php" class="tile no-underline text-dark" role="button">
                 <i class="fa-solid fa-users me-2"></i>
                 <div>
                     <h5>Usuarios</h5>
                     <p></p>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="col-md-3 mb-4">
-            <div class="tile" onclick="location.href='../career/career.php';">
+            <a class="tile no-underline text-dark" href="../career/career.php" role="button">
                 <i class="fa-solid fa-graduation-cap me-2"></i>
                 <div>
                     <h5>Carreras</h5>
                     <p></p>
                 </div>
-            </div>
+            </a>
         </div>
 
     </div>
